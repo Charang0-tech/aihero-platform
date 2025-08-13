@@ -39,7 +39,7 @@ export default function SignUpPage() {
         password,
         options: {
           data: {
-            name: email.split('@')[0], // Use email prefix as default name
+            name: email.split('@')[0],
           }
         }
       })
@@ -48,7 +48,6 @@ export default function SignUpPage() {
 
       if (data.user) {
         setSuccess(true)
-        // Automatically sign in after successful signup
         setTimeout(() => {
           router.push('/')
         }, 2000)
@@ -82,7 +81,6 @@ export default function SignUpPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        {/* Header */}
         <div className="text-center mb-8">
           <div className="flex items-center justify-center mb-4">
             <Zap className="h-12 w-12 text-yellow-400" />
@@ -95,7 +93,6 @@ export default function SignUpPage() {
           </p>
         </div>
 
-        {/* Sign Up Form */}
         <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 shadow-2xl border border-white/20">
           <form onSubmit={handleSignUp} className="space-y-6">
             {error && (
@@ -162,7 +159,6 @@ export default function SignUpPage() {
               />
             </div>
 
-            {/* Free Account Benefits */}
             <div className="bg-green-500/20 border border-green-500/50 rounded-lg p-4">
               <h3 className="text-green-200 font-medium mb-2">✨ Free Account Includes:</h3>
               <ul className="text-green-100 text-sm space-y-1">
@@ -182,7 +178,6 @@ export default function SignUpPage() {
             </button>
           </form>
 
-          {/* Links */}
           <div className="mt-6 text-center space-y-4">
             <p className="text-gray-300">
               Already have an account?{' '}
@@ -207,4 +202,4 @@ export default function SignUpPage() {
       </div>
     </div>
   )
-]
+}
