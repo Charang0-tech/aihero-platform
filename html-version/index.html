@@ -1,0 +1,448 @@
+cat > app/lesson/\[id\]/page.tsx << 'EOF'
+'use client';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import dynamic from 'next/dynamic';
+import { useProgressStore } from '../../../stores/useProgressStore';
+
+const MonacoEditor = dynamic(() => import('@monaco-editor/react'), { ssr: false });
+
+const lessonContent = {
+  'w1-mon': {
+    title: 'Python Installation & Basic Syntax',
+    objective: 'Install Python, VS Code, write first 10 programs',
+    timeLimit: 150,
+    content: `Welcome to AIHero. No hand-holding here.
+
+**Installation:**
+1. Download Python 3.10+ from python.org
+2. Install VS Code with Python extension
+3. Verify: python --version
+
+**Basic Syntax:**
+- Variables: name = "John"
+- Print: print("Hello!")
+- Math: 5 + 3, 10 / 2
+- Comments: # This is a comment`,
+    starterCode: '# Your first Python program\nprint("Hello, AIHero!")\n\n# Variables\nname = "Your Name"\nage = 25\n\n# Math\nresult = 10 + 5\nprint(f"Result: {result}")',
+    solution: 'print("Hello, AIHero!")\nname = "John"\nage = 25\nresult = 10 + 5\nprint(f"My name is {name}, I am {age} years old")\nprint(f"Math result: {result}")'
+  },
+  'w1-tue': {
+    title: 'Variables & Data Types',
+    objective: 'Master strings, integers, floats, booleans',
+    timeLimit: 150,
+    content: `Master Python data types.
+
+**String Operations:**
+- .upper(), .lower(), .strip()
+- f"Hello {name}" - formatting
+- .split(), .replace()
+
+**Numbers:**
+- int: 25, 100
+- float: 5.9, 3.14
+- Operations: +, -, *, /, %
+
+**Booleans:**
+- True, False
+- Comparisons: ==, !=, <, >`,
+    starterCode: '# String manipulation\nfull_name = "john doe"\n\n# Number operations\nbill = 50.0\ntip_percent = 18\n\n# Your code here',
+    solution: 'full_name = "john doe"\nformatted = full_name.title()\nprint(f"Formatted: {formatted}")\n\nbill = 50.0\ntip_percent = 18\ntip = bill * (tip_percent / 100)\ntotal = bill + tip\nprint(f"Bill: ${bill}, Tip: ${tip:.2f}, Total: ${total:.2f}")'
+  },
+  'w1-wed': {
+    title: 'Lists & Dictionaries',
+    objective: 'Create, modify, iterate through data structures',
+    timeLimit: 150,
+    content: `Data structures are fundamental.
+
+**Lists:**
+- numbers = [1, 2, 3]
+- numbers.append(4)
+- numbers[0] = 10
+- for item in numbers:
+
+**Dictionaries:**
+- person = {"name": "John", "age": 25}
+- person["name"]
+- person["city"] = "NYC"
+- for key, value in person.items():`,
+    starterCode: '# Create a simple user database\nusers = []\n\n# Add users (name, email, age)\n# Create functions to:\n# 1. Add user\n# 2. Find user by email\n# 3. List all users\n\n# Your code here',
+    solution: 'users = []\n\ndef add_user(name, email, age):\n    user = {"name": name, "email": email, "age": age}\n    users.append(user)\n    print(f"Added {name}")\n\ndef find_user(email):\n    for user in users:\n        if user["email"] == email:\n            return user\n    return None\n\n# Test it\nadd_user("John", "john@email.com", 25)\nadd_user("Jane", "jane@email.com", 30)\nprint(f"Total users: {len(users)}")\nfound = find_user("john@email.com")\nif found:\n    print(f"Found: {found[\"name\"]}")'
+  },
+  'w1-thu': {
+    title: 'Loops & Conditionals',
+    objective: 'Master for/while loops and if/elif/else',
+    timeLimit: 150,
+    content: `Control flow determines program logic.
+
+**Conditionals:**
+- if condition:
+- elif other_condition:
+- else:
+
+**For Loops:**
+- for i in range(10):
+- for item in my_list:
+- for key, value in my_dict.items():
+
+**While Loops:**
+- while condition:
+- break, continue`,
+    starterCode: '# User scoring system\nusers = [\n    {"name": "Alice", "score": 85},\n    {"name": "Bob", "score": 92},\n    {"name": "Charlie", "score": 78}\n]\n\n# Tasks:\n# 1. Find users with score > 80\n# 2. Calculate average score\n# 3. Assign letter grades (A: 90+, B: 80-89, etc.)\n\n# Your code here',
+    solution: 'users = [\n    {"name": "Alice", "score": 85},\n    {"name": "Bob", "score": 92},\n    {"name": "Charlie", "score": 78}\n]\n\n# Find high scorers\nhigh_scorers = []\nfor user in users:\n    if user["score"] > 80:\n        high_scorers.append(user["name"])\n\nprint(f"High scorers: {high_scorers}")\n\n# Calculate average\ntotal = sum(user["score"] for user in users)\naverage = total / len(users)\nprint(f"Average score: {average:.1f}")\n\n# Assign grades\nfor user in users:\n    score = user["score"]\n    if score >= 90:\n        grade = "A"\n    elif score >= 80:\n        grade = "B"\n    elif score >= 70:\n        grade = "C"\n    else:\n        grade = "F"\n    print(f"{user[\"name\"]}: {score} ({grade})")'
+  }
+};
+
+export default function LessonPage({ params }: { params: { id: string } }) {
+  const router = useRouter();
+  const [sessionStarted, setSessionStarted] = useState(false);
+  const [startTime, setStartTime] = useState<Date | null>(null);
+  const [code, setCode] = useState('');
+  const [output, setOutput] = useState('');
+  const [showSolution, setShowSolution] = useState(false);
+  const [completed, setCompleted] = useState(false);
+  
+  const { startLeessson, completeLesson } = useProgressStore();
+  const lesson = lessonContent[params.id as keyof typeof lessonContent];
+
+  useEffect(() => {
+    if (lesson) {
+      setCode(lesson.starterCode);
+    }
+  }, [lesson]);
+
+  if (!lesson) {
+    return (
+      <div style={{ 
+        minHeight: '100vh', 
+        backgroundColor: '#111827', 
+        color: 'white',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}>
+        <div style={{ textAlign: 'center' }}>
+          <h1 style={{ fontSize: '32px', color: '#ef4444' }}>Lesson Not Found</h1>
+          <button 
+            onClick={() => router.push('/')}
+            style={{
+              backgroundColor: '#6b7280',
+              color: 'white',
+              padding: '12px 24px',
+              border: 'none',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              marginTop: '16px'
+            }}
+          >
+            ← Back to Dashboard
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const timeElapsed = startTime ? 
+    Math.floor((new Date().getTime() - startTime.getTime()) / 60000) : 0;
+
+  const handleStartSession = () => {
+    setSessionStarted(true);
+    setStartTime(new Date());
+    startLesson(params.id);
+  };
+
+  const handleRunCode = () => {
+    if (code.includes('print(')) {
+      const matches = code.match(/print\(['"](.*?)['"]\)/g);
+      if (matches) {
+        const outputs = matches.map(match => {
+          const content = match.match(/print\(['"](.*?)['"]\)/)?.[1] || '';
+          return content;
+        });
+        setOutput(outputs.join('\n'));
+      } else {
+        setOutput('Code executed successfully');
+      }
+    } else {
+      setOutput('Code executed successfully');
+    }
+  };
+
+  const handleComplete = () => {
+    setCompleted(true);
+    completeLesson(params.id, {
+      difficultyRating: 3,
+      confidenceRating: 4
+    });
+  };
+
+  if (!sessionStarted) {
+    return (
+      <div style={{ 
+        minHeight: '100vh', 
+        backgroundColor: '#111827', 
+        color: 'white',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}>
+        <div style={{
+          backgroundColor: '#1f2937',
+          padding: '48px',
+          borderRadius: '16px',
+          textAlign: 'center',
+          maxWidth: '600px'
+        }}>
+          <h1 style={{ fontSize: '32px', color: '#fcd34d', marginBottom: '16px' }}>
+            {lesson.title}
+          </h1>
+          <p style={{ fontSize: '18px', color: '#9ca3af', marginBottom: '24px' }}>
+            {lesson.objective}
+          </p>
+          <p style={{ color: '#fbbf24', fontWeight: 'bold', marginBottom: '24px' }}>
+            ⚠️ BRUTAL STANDARD: {lesson.timeLimit} minutes maximum
+          </p>
+          <button 
+            onClick={handleStartSession}
+            style={{
+              backgroundColor: '#dc2626',
+              color: 'white',
+              padding: '16px 32px',
+              border: 'none',
+              borderRadius: '8px',
+              fontSize: '18px',
+              fontWeight: 'bold',
+              cursor: 'pointer',
+              marginRight: '16px'
+            }}
+          >
+            🔥 START LESSON
+          </button>
+          <button 
+            onClick={() => router.push('/')}
+            style={{
+              backgroundColor: '#6b7280',
+              color: 'white',
+              padding: '16px 32px',
+              border: 'none',
+              borderRadius: '8px',
+              fontSize: '18px',
+              cursor: 'pointer'
+            }}
+          >
+            ← Back
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (completed) {
+    return (
+      <div style={{ 
+        minHeight: '100vh', 
+        backgroundColor: '#111827', 
+        color: 'white',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}>
+        <div style={{
+          backgroundColor: '#065f46',
+          padding: '48px',
+          borderRadius: '16px',
+          textAlign: 'center',
+          maxWidth: '600px'
+        }}>
+          <h1 style={{ fontSize: '48px', marginBottom: '16px' }}>✅</h1>
+          <h2 style={{ fontSize: '32px', color: '#6ee7b7', marginBottom: '16px' }}>
+            Lesson Completed!
+          </h2>
+          <p style={{ fontSize: '18px', color: '#a7f3d0', marginBottom: '24px' }}>
+            {lesson.title} - {timeElapsed} minutes
+          </p>
+          <button 
+            onClick={() => router.push('/')}
+            style={{
+              backgroundColor: '#16a34a',
+              color: 'white',
+              padding: '16px 32px',
+              border: 'none',
+              borderRadius: '8px',
+              fontSize: '18px',
+              fontWeight: 'bold',
+              cursor: 'pointer'
+            }}
+          >
+            🚀 Back to Dashboard
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ 
+      minHeight: '100vh', 
+      backgroundColor: '#111827', 
+      color: 'white'
+    }}>
+      <div style={{
+        backgroundColor: '#1f2937',
+        padding: '16px 24px',
+        borderBottom: '2px solid #374151',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+      }}>
+        <button 
+          onClick={() => router.push('/')}
+          style={{
+            backgroundColor: '#6b7280',
+            color: 'white',
+            padding: '8px 16px',
+            border: 'none',
+            borderRadius: '6px',
+            cursor: 'pointer'
+          }}
+        >
+          ← Dashboard
+        </button>
+        
+        <h1 style={{ margin: '0', fontSize: '20px', color: '#fcd34d' }}>
+          {lesson.title}
+        </h1>
+
+        <div style={{ 
+          color: timeElapsed > lesson.timeLimit ? '#ef4444' : '#22c55e',
+          fontSize: '18px',
+          fontWeight: 'bold'
+        }}>
+          {timeElapsed} / {lesson.timeLimit} min
+        </div>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', height: 'calc(100vh - 80px)' }}>
+        <div style={{ 
+          padding: '24px', 
+          backgroundColor: '#1f2937',
+          borderRight: '2px solid #374151',
+          overflowY: 'auto'
+        }}>
+          <h2 style={{ fontSize: '24px', color: '#fcd34d', marginBottom: '16px' }}>
+            Lesson Content
+          </h2>
+          
+          <div style={{ 
+            backgroundColor: '#374151', 
+            padding: '20px', 
+            borderRadius: '8px',
+            marginBottom: '24px',
+            whiteSpace: 'pre-line',
+            lineHeight: '1.6'
+          }}>
+            {lesson.content}
+          </div>
+
+          <div style={{ display: 'flex', gap: '12px', marginBottom: '16px' }}>
+            <button 
+              onClick={handleComplete}
+              style={{
+                backgroundColor: '#dc2626',
+                color: 'white',
+                padding: '12px 24px',
+                border: 'none',
+                borderRadius: '6px',
+                cursor: 'pointer',
+                flex: 1,
+                fontWeight: 'bold'
+              }}
+            >
+              ✅ COMPLETE LESSON
+            </button>
+          </div>
+
+          <button 
+            onClick={() => setShowSolution(!showSolution)}
+            style={{
+              backgroundColor: '#7c2d12',
+              color: '#fed7aa',
+              padding: '8px 16px',
+              border: 'none',
+              borderRadius: '6px',
+              cursor: 'pointer',
+              width: '100%'
+            }}
+          >
+            {showSolution ? 'Hide Solution' : '💡 Show Solution'}
+          </button>
+        </div>
+
+        <div style={{ 
+          display: 'flex',
+          flexDirection: 'column',
+          backgroundColor: '#0f172a'
+        }}>
+          <div style={{ 
+            padding: '16px', 
+            backgroundColor: '#1e293b',
+            borderBottom: '1px solid #334155'
+          }}>
+            <button 
+              onClick={handleRunCode}
+              style={{
+                backgroundColor: '#16a34a',
+                color: 'white',
+                padding: '8px 16px',
+                border: 'none',
+                borderRadius: '6px',
+                cursor: 'pointer',
+                fontWeight: 'bold'
+              }}
+            >
+              ▶️ Run Code
+            </button>
+          </div>
+
+          <div style={{ flex: 1 }}>
+            <MonacoEditor
+              height="60%"
+              defaultLanguage="python"
+              theme="vs-dark"
+              value={showSolution ? lesson.solution : code}
+              onChange={(value) => setCode(value || '')}
+              options={{
+                fontSize: 14,
+                minimap: { enabled: false },
+                scrollBeyondLastLine: false,
+                wordWrap: 'on'
+              }}
+            />
+          </div>
+
+          <div style={{ 
+            height: '40%',
+            backgroundColor: '#0f172a',
+            borderTop: '2px solid #334155',
+            padding: '16px',
+            overflowY: 'auto'
+          }}>
+            <h3 style={{ margin: '0 0 12px 0', color: '#22c55e' }}>Output:</h3>
+            <pre style={{ 
+              margin: '0',
+              color: '#e2e8f0',
+              backgroundColor: '#1e293b',
+              padding: '12px',
+              borderRadius: '6px',
+              fontSize: '14px',
+              whiteSpace: 'pre-wrap'
+            }}>
+              {output || 'Click "Run Code" to see output...'}
+            </pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+EOF
