@@ -15,7 +15,6 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   }
 })
 
-// Helper functions for common operations
 export const auth = {
   signUp: async (email: string, password: string, metadata?: any) => {
     return await supabase.auth.signUp({
@@ -36,15 +35,5 @@ export const auth = {
   
   signOut: async () => {
     return await supabase.auth.signOut()
-  },
-  
-  getCurrentUser: async () => {
-    const { data: { user } } = await supabase.auth.getUser()
-    return user
-  },
-  
-  getCurrentSession: async () => {
-    const { data: { session } } = await supabase.auth.getSession()
-    return session
   }
 }
