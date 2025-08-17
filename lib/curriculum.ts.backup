@@ -1,0 +1,331 @@
+// lib/curriculum.ts
+export interface Lesson {
+  id: string
+  week: number
+  day: string
+  title: string
+  duration: number // minutes
+  target: string
+  deliverable: string
+  passCriteria?: string
+  difficulty: number // 1-5
+  mathPrep?: string
+}
+
+export const aiHeroCurriculum = {
+  totalWeeks: 14,
+  totalLessons: 84,
+  lessons: [
+    // WEEK 1: Python Fundamentals
+    {
+      id: 'w1-mon',
+      week: 1,
+      day: 'Monday',
+      title: 'Python Installation & Basic Syntax',
+      duration: 150,
+      target: 'Install Python, write first 10 programs',
+      deliverable: 'Working calculator program',
+      passCriteria: 'Calculator handles all basic operations without errors',
+      difficulty: 2
+    },
+    {
+      id: 'w1-tue',
+      week: 1,
+      day: 'Tuesday', 
+      title: 'Functions, Variables & Control Flow',
+      duration: 150,
+      target: 'Master if/else, loops, functions',
+      deliverable: 'Text adventure game',
+      passCriteria: 'Game has at least 5 decision points',
+      difficulty: 3
+    },
+    {
+      id: 'w1-wed',
+      week: 1,
+      day: 'Wednesday',
+      title: 'Data Structures & File Handling',
+      duration: 150,
+      target: 'Lists, dicts, file operations',
+      deliverable: 'CSV data processor',
+      passCriteria: 'Handle file errors and edge cases',
+      difficulty: 3
+    },
+    {
+      id: 'w1-thu',
+      week: 1,
+      day: 'Thursday',
+      title: 'Error Handling & Debugging',
+      duration: 150,
+      target: 'Try/except, debugging strategies',
+      deliverable: 'Robust file processor',
+      passCriteria: 'Handle all common file errors gracefully',
+      difficulty: 4
+    },
+    {
+      id: 'w1-fri',
+      week: 1,
+      day: 'Friday',
+      title: 'Object-Oriented Programming Basics',
+      duration: 150,
+      target: 'Classes, objects, inheritance',
+      deliverable: 'Bank account system',
+      passCriteria: 'Support multiple account types',
+      difficulty: 5
+    },
+    {
+      id: 'w1-sat',
+      week: 1,
+      day: 'Saturday',
+      title: 'Build a Complete Python Project',
+      duration: 150,
+      target: 'Integrate week\'s learning',
+      deliverable: 'Personal finance tracker',
+      passCriteria: 'Track income, expenses, generate reports',
+      difficulty: 5
+    },
+
+    // WEEK 2: API Integration & Data Handling
+    {
+      id: 'w2-mon',
+      week: 2,
+      day: 'Monday',
+      title: 'HTTP Requests & API Basics',
+      duration: 150,
+      target: 'Make API calls, handle responses',
+      deliverable: 'Weather API client',
+      passCriteria: 'Handle network failures and bad responses',
+      difficulty: 4
+    },
+    {
+      id: 'w2-tue',
+      week: 2,
+      day: 'Tuesday',
+      title: 'JSON Data Handling',
+      duration: 150,
+      target: 'Parse and manipulate JSON data',
+      deliverable: 'JSON data transformer',
+      passCriteria: 'Handle nested JSON structures',
+      difficulty: 3
+    },
+    {
+      id: 'w2-wed',
+      week: 2,
+      day: 'Wednesday',
+      title: 'API Authentication & Rate Limiting',
+      duration: 150,
+      target: 'Handle API keys, rate limits',
+      deliverable: 'Robust API wrapper',
+      passCriteria: 'Respect rate limits and handle auth errors',
+      difficulty: 4
+    },
+    {
+      id: 'w2-thu',
+      week: 2,
+      day: 'Thursday',
+      title: 'Data Validation & Processing',
+      duration: 150,
+      target: 'Validate and clean API data',
+      deliverable: 'Data cleaning pipeline',
+      passCriteria: 'Handle missing and invalid data',
+      difficulty: 4
+    },
+    {
+      id: 'w2-fri',
+      week: 2,
+      day: 'Friday',
+      title: 'Building RESTful Clients',
+      duration: 150,
+      target: 'Create reusable API clients',
+      deliverable: 'Generic REST client',
+      passCriteria: 'Support CRUD operations with any API',
+      difficulty: 5
+    },
+    {
+      id: 'w2-sat',
+      week: 2,
+      day: 'Saturday',
+      title: 'Multi-API Integration Project',
+      duration: 150,
+      target: 'Combine multiple APIs',
+      deliverable: 'News aggregator app',
+      passCriteria: 'Aggregate from 3+ news sources',
+      difficulty: 5
+    },
+
+    // WEEK 3: Statistics & Math Foundations
+    {
+      id: 'w3-mon',
+      week: 3,
+      day: 'Monday',
+      title: 'Descriptive Statistics',
+      duration: 150,
+      target: 'Mean, median, mode, standard deviation',
+      deliverable: 'Statistics calculator',
+      passCriteria: 'Calculate and interpret basic stats',
+      difficulty: 3,
+      mathPrep: 'Statistics in Plain English Chapters 1-3'
+    },
+    {
+      id: 'w3-tue',
+      week: 3,
+      day: 'Tuesday',
+      title: 'Probability Foundations',
+      duration: 150,
+      target: 'Basic probability theory',
+      deliverable: 'Probability simulator',
+      passCriteria: 'Model complex probability scenarios',
+      difficulty: 4,
+      mathPrep: 'Khan Academy Probability'
+    },
+    {
+      id: 'w3-wed',
+      week: 3,
+      day: 'Wednesday',
+      title: 'Data Distributions',
+      duration: 150,
+      target: 'Normal, binomial, poisson distributions',
+      deliverable: 'Distribution analyzer',
+      passCriteria: 'Identify and fit distributions to data',
+      difficulty: 4
+    },
+    {
+      id: 'w3-thu',
+      week: 3,
+      day: 'Thursday',
+      title: 'Hypothesis Testing',
+      duration: 150,
+      target: 'T-tests, chi-square, p-values',
+      deliverable: 'Hypothesis testing suite',
+      passCriteria: 'Correctly interpret statistical significance',
+      difficulty: 5
+    },
+    {
+      id: 'w3-fri',
+      week: 3,
+      day: 'Friday',
+      title: 'Correlation & Regression',
+      duration: 150,
+      target: 'Linear regression, correlation analysis',
+      deliverable: 'Regression analyzer',
+      passCriteria: 'Build and validate regression models',
+      difficulty: 5
+    },
+    {
+      id: 'w3-sat',
+      week: 3,
+      day: 'Saturday',
+      title: 'Statistical Analysis Project',
+      duration: 150,
+      target: 'Complete statistical analysis',
+      deliverable: 'Real dataset analysis',
+      passCriteria: 'Present insights with statistical backing',
+      difficulty: 5
+    },
+
+    // WEEK 4: AI APIs & Integration
+    {
+      id: 'w4-mon',
+      week: 4,
+      day: 'Monday',
+      title: 'OpenAI API Fundamentals',
+      duration: 150,
+      target: 'Connect to OpenAI, make requests',
+      deliverable: 'Basic chatbot',
+      passCriteria: 'Handle API errors and rate limits',
+      difficulty: 3
+    },
+    {
+      id: 'w4-tue',
+      week: 4,
+      day: 'Tuesday',
+      title: 'Prompt Engineering',
+      duration: 150,
+      target: 'Design effective prompts',
+      deliverable: 'Prompt optimization system',
+      passCriteria: 'Improve response quality measurably',
+      difficulty: 4
+    },
+    {
+      id: 'w4-wed',
+      week: 4,
+      day: 'Wednesday',
+      title: 'AI Model Comparison',
+      duration: 150,
+      target: 'Compare different AI models',
+      deliverable: 'Model comparison tool',
+      passCriteria: 'Quantify performance differences',
+      difficulty: 4
+    },
+    {
+      id: 'w4-thu',
+      week: 4,
+      day: 'Thursday',
+      title: 'Context Management & Memory',
+      duration: 150,
+      target: 'Handle conversation context',
+      deliverable: 'Contextual chatbot',
+      passCriteria: 'Maintain context across conversations',
+      difficulty: 5
+    },
+    {
+      id: 'w4-fri',
+      week: 4,
+      day: 'Friday',
+      title: 'AI Application Architecture',
+      duration: 150,
+      target: 'Design production AI systems',
+      deliverable: 'AI system architecture',
+      passCriteria: 'Handle scale and reliability concerns',
+      difficulty: 5
+    },
+    {
+      id: 'w4-sat',
+      week: 4,
+      day: 'Saturday',
+      title: 'Deploy AI Application',
+      duration: 150,
+      target: 'Deploy AI app to production',
+      deliverable: 'Live AI application',
+      passCriteria: 'App handles real user traffic',
+      difficulty: 5
+    }
+
+    // Additional weeks would continue here...
+    // For now, this gives you the first 4 weeks (24 lessons)
+  ] as Lesson[]
+}
+
+export function getLessonsByWeek(week: number): Lesson[] {
+  return aiHeroCurriculum.lessons.filter(lesson => lesson.week === week)
+}
+
+export function getLessonById(id: string): Lesson | undefined {
+  return aiHeroCurriculum.lessons.find(lesson => lesson.id === id)
+}
+
+export function getCurrentLesson(currentWeek: number, currentDay: string): Lesson | undefined {
+  return aiHeroCurriculum.lessons.find(lesson => 
+    lesson.week === currentWeek && lesson.day === currentDay
+  )
+}
+
+export function calculateProgress(completedLessons: string[]): number {
+  return Math.round((completedLessons.length / aiHeroCurriculum.totalLessons) * 100)
+}
+
+export function getWeekProgress(week: number, completedLessons: string[]): {
+  completed: number
+  total: number
+  percentage: number
+} {
+  const weekLessons = getLessonsByWeek(week)
+  const completed = weekLessons.filter(lesson => 
+    completedLessons.includes(lesson.id)
+  ).length
+  
+  return {
+    completed,
+    total: weekLessons.length,
+    percentage: Math.round((completed / weekLessons.length) * 100)
+  }
+}

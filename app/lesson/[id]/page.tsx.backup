@@ -1,0 +1,708 @@
+'use client';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import dynamic from 'next/dynamic';
+import { useProgressStore } from '../../../stores/useProgressStore';
+// lib/curriculum.ts - Complete AIHero Curriculum
+
+export interface Lesson {
+  id: string;
+  week: number;
+  day: string;
+  title: string;
+  duration: number;
+  target: string;
+  deliverable: string;
+  passCriteria: string;
+  difficulty: number;
+  mathPrep?: string;
+  module: 'basic' | 'intermediate';
+}
+
+export interface Week {
+  number: number;
+  title: string;
+  module: 'basic' | 'intermediate';
+  description: string;
+  learningObjectives: string[];
+  totalLessons: number;
+}
+
+export const curriculum = {
+  totalWeeks: 14,
+  totalLessons: 84,
+  
+  modules: {
+    basic: {
+      title: 'Foundation Module',
+      weeks: [1, 2, 3, 4, 5, 6, 7, 8],
+      description: 'Python fundamentals, data handling, APIs, statistics, and first AI integration'
+    },
+    intermediate: {
+      title: 'AI Development Module', 
+      weeks: [9, 10, 11, 12, 13, 14],
+      description: 'Machine learning, neural networks, deployment, and advanced AI systems'
+    }
+  },
+
+  weeks: [
+    // BASIC MODULE (Weeks 1-8)
+    {
+      number: 1,
+      title: 'Python Mastery for AI',
+      module: 'basic' as const,
+      description: 'Master Python fundamentals essential for AI development',
+      learningObjectives: [
+        'Install and configure Python development environment',
+        'Master variables, data types, and basic operations',
+        'Work with lists, dictionaries, and data structures',
+        'Write functions and handle control flow',
+        'Implement file I/O and error handling',
+        'Build complete applications from scratch'
+      ],
+      totalLessons: 6
+    },
+    {
+      number: 2,
+      title: 'Data Handling & APIs',
+      module: 'basic' as const,
+      description: 'Work with files, APIs, and external data sources',
+      learningObjectives: [
+        'Process CSV and JSON data efficiently',
+        'Make HTTP requests and consume APIs',
+        'Handle API authentication and rate limiting',
+        'Implement robust error handling',
+        'Build data processing pipelines',
+        'Create complete API-driven applications'
+      ],
+      totalLessons: 6
+    },
+    {
+      number: 3,
+      title: 'Math Refresher & Statistics',
+      module: 'basic' as const,
+      description: 'Essential mathematical foundations for AI',
+      learningObjectives: [
+        'Calculate and interpret descriptive statistics',
+        'Understand probability and distributions',
+        'Perform hypothesis testing',
+        'Create effective data visualizations',
+        'Work with sampling and confidence intervals',
+        'Complete statistical analysis projects'
+      ],
+      totalLessons: 6
+    },
+    {
+      number: 4,
+      title: 'First AI Integration',
+      module: 'basic' as const,
+      description: 'Begin working with AI APIs and prompt engineering',
+      learningObjectives: [
+        'Set up and use OpenAI API',
+        'Master prompt engineering techniques',
+        'Build conversational AI interfaces',
+        'Handle context and memory in chatbots',
+        'Implement production-ready error handling',
+        'Deploy first AI application'
+      ],
+      totalLessons: 6
+    },
+    {
+      number: 5,
+      title: 'Pandas & NumPy Mastery',
+      module: 'basic' as const,
+      description: 'Master data manipulation with pandas and numerical computing',
+      learningObjectives: [
+        'Master DataFrame operations and indexing',
+        'Perform data cleaning and preprocessing',
+        'Handle missing data and outliers',
+        'Merge and join multiple datasets',
+        'Optimize performance for large datasets',
+        'Build automated data pipelines'
+      ],
+      totalLessons: 6
+    },
+    {
+      number: 6,
+      title: 'Advanced Data Manipulation',
+      module: 'basic' as const,
+      description: 'Advanced techniques for complex data transformations',
+      learningObjectives: [
+        'Implement complex data transformations',
+        'Work with time series data',
+        'Handle multi-level indexing',
+        'Create custom aggregation functions',
+        'Optimize memory usage and performance',
+        'Build reusable data processing modules'
+      ],
+      totalLessons: 6
+    },
+    {
+      number: 7,
+      title: 'Data Visualization & Storytelling',
+      module: 'basic' as const,
+      description: 'Create compelling visualizations and data narratives',
+      learningObjectives: [
+        'Master matplotlib and seaborn',
+        'Create interactive visualizations',
+        'Design effective dashboards',
+        'Tell stories with data',
+        'Build automated reporting systems',
+        'Present insights to stakeholders'
+      ],
+      totalLessons: 6
+    },
+    {
+      number: 8,
+      title: 'Exploratory Data Analysis',
+      module: 'basic' as const,
+      description: 'Complete end-to-end data analysis projects',
+      learningObjectives: [
+        'Conduct comprehensive EDA',
+        'Identify patterns and anomalies',
+        'Generate actionable insights',
+        'Create professional analysis reports',
+        'Validate findings statistically',
+        'Present recommendations effectively'
+      ],
+      totalLessons: 6
+    },
+
+    // INTERMEDIATE MODULE (Weeks 9-14)
+    {
+      number: 9,
+      title: 'Supervised Learning',
+      module: 'intermediate' as const,
+      description: 'Master classification and regression algorithms',
+      learningObjectives: [
+        'Implement linear and logistic regression',
+        'Build decision trees and random forests',
+        'Use support vector machines',
+        'Evaluate model performance',
+        'Handle overfitting and regularization',
+        'Build production ML pipelines'
+      ],
+      totalLessons: 6
+    },
+    {
+      number: 10,
+      title: 'Unsupervised Learning & Feature Engineering',
+      module: 'intermediate' as const,
+      description: 'Clustering, dimensionality reduction, and feature optimization',
+      learningObjectives: [
+        'Implement k-means and hierarchical clustering',
+        'Apply PCA and t-SNE',
+        'Engineer effective features',
+        'Handle categorical variables',
+        'Perform feature selection',
+        'Build automated feature pipelines'
+      ],
+      totalLessons: 6
+    },
+    {
+      number: 11,
+      title: 'Neural Networks & Deep Learning',
+      module: 'intermediate' as const,
+      description: 'Build and train neural networks from scratch',
+      learningObjectives: [
+        'Understand neural network fundamentals',
+        'Implement backpropagation',
+        'Build CNNs for image processing',
+        'Create RNNs for sequence data',
+        'Use transfer learning effectively',
+        'Optimize training and hyperparameters'
+      ],
+      totalLessons: 6
+    },
+    {
+      number: 12,
+      title: 'Model Deployment & MLOps',
+      module: 'intermediate' as const,
+      description: 'Deploy models to production with monitoring',
+      learningObjectives: [
+        'Containerize ML applications with Docker',
+        'Deploy to cloud platforms',
+        'Implement model monitoring',
+        'Set up automated retraining',
+        'Handle model versioning',
+        'Build scalable ML systems'
+      ],
+      totalLessons: 6
+    },
+    {
+      number: 13,
+      title: 'Large Language Models & Advanced NLP',
+      module: 'intermediate' as const,
+      description: 'Work with transformers and modern NLP techniques',
+      learningObjectives: [
+        'Fine-tune large language models',
+        'Build embeddings and vector databases',
+        'Implement retrieval-augmented generation',
+        'Create custom NLP pipelines',
+        'Handle multilingual text processing',
+        'Build production NLP applications'
+      ],
+      totalLessons: 6
+    },
+    {
+      number: 14,
+      title: 'Capstone Project',
+      module: 'intermediate' as const,
+      description: 'Build a complete AI system from requirements to deployment',
+      learningObjectives: [
+        'Design system architecture',
+        'Implement full-stack AI application',
+        'Handle real-world data challenges',
+        'Deploy to production environment',
+        'Monitor and maintain system',
+        'Present professional project'
+      ],
+      totalLessons: 6
+    }
+  'w1-tue': {
+    title: 'Variables & Data Types',
+    objective: 'Master strings, integers, floats, booleans',
+    timeLimit: 150,
+    content: 'Master Python data types.\n\n**String Operations:**\n- .upper(), .lower(), .strip()\n- f"Hello {name}" - formatting\n- .split(), .replace()\n\n**Numbers:**\n- int: 25, 100\n- float: 5.9, 3.14\n- Operations: +, -, *, /, %\n\n**Booleans:**\n- True, False\n- Comparisons: ==, !=, <, >',
+    starterCode: '# String manipulation\nfull_name = "john doe"\n\n# Number operations\nbill = 50.0\ntip_percent = 18\n\n# Your code here',
+    solution: 'full_name = "john doe"\nformatted = full_name.title()\nprint(f"Formatted: {formatted}")\n\nbill = 50.0\ntip_percent = 18\ntip = bill * (tip_percent / 100)\ntotal = bill + tip\nprint(f"Bill: ${bill}, Tip: ${tip:.2f}, Total: ${total:.2f}")'
+  },
+  'w1-wed': {
+    title: 'Lists & Dictionaries',
+    objective: 'Create, modify, iterate through data structures',
+    timeLimit: 150,
+    content: 'Data structures are fundamental.\n\n**Lists:**\n- numbers = [1, 2, 3]\n- numbers.append(4)\n- numbers[0] = 10\n- for item in numbers:\n\n**Dictionaries:**\n- person = {"name": "John", "age": 25}\n- person["name"]\n- person["city"] = "NYC"\n- for key, value in person.items():',
+    starterCode: '# Create a simple user database\nusers = []\n\n# Add users (name, email, age)\n# Create functions to:\n# 1. Add user\n# 2. Find user by email\n# 3. Display all users',
+    solution: 'users = []\n\ndef add_user(name, email, age):\n    user = {"name": name, "email": email, "age": age}\n    users.append(user)\n    return user\n\ndef find_user(email):\n    for user in users:\n        if user["email"] == email:\n            return user\n    return None\n\ndef display_users():\n    for user in users:\n        print(f"Name: {user[\'name\']}, Email: {user[\'email\']}, Age: {user[\'age\']}")\n\nadd_user("John", "john@email.com", 25)\nadd_user("Jane", "jane@email.com", 30)\ndisplay_users()'
+  },
+  'w1-thu': {
+    title: 'Functions & Control Flow',
+    objective: 'Build reusable functions with conditionals',
+    timeLimit: 150,
+    content: 'Functions are the building blocks.\n\n**Functions:**\n- def function_name():\n- def with_params(x, y):\n- return statement\n- Default parameters\n\n**Control Flow:**\n- if, elif, else\n- for loops\n- while loops\n- break, continue',
+    starterCode: '# Build a grade calculator\n# Function should take a score and return letter grade\n# A: 90+, B: 80-89, C: 70-79, D: 60-69, F: below 60\n\ndef calculate_grade(score):\n    # Your code here\n    pass\n\n# Test with different scores',
+    solution: 'def calculate_grade(score):\n    if score >= 90:\n        return "A"\n    elif score >= 80:\n        return "B"\n    elif score >= 70:\n        return "C"\n    elif score >= 60:\n        return "D"\n    else:\n        return "F"\n\ntest_scores = [95, 87, 72, 65, 45]\nfor score in test_scores:\n    grade = calculate_grade(score)\n    print(f"Score: {score} = Grade: {grade}")'
+  },
+  'w1-fri': {
+    title: 'File Handling & Error Management',
+    objective: 'Read/write files, handle exceptions gracefully',
+    timeLimit: 150,
+    content: 'Real programs handle data and errors.\n\n**File Operations:**\n- open("file.txt", "r")\n- with open() as file:\n- .read(), .readline(), .readlines()\n- .write(), .writelines()\n\n**Error Handling:**\n- try/except blocks\n- specific exceptions\n- finally clause',
+    starterCode: '# Create a simple note-taking system\n# Functions to:\n# 1. Write note to file\n# 2. Read all notes\n# 3. Handle file not found errors\n\ndef write_note(note, filename="notes.txt"):\n    # Your code here\n    pass\n\ndef read_notes(filename="notes.txt"):\n    # Your code here\n    pass',
+    solution: 'def write_note(note, filename="notes.txt"):\n    try:\n        with open(filename, "a") as file:\n            file.write(f"{note}\\n")\n        print("Note saved successfully")\n    except Exception as e:\n        print(f"Error writing note: {e}")\n\ndef read_notes(filename="notes.txt"):\n    try:\n        with open(filename, "r") as file:\n            notes = file.readlines()\n        return [note.strip() for note in notes]\n    except FileNotFoundError:\n        print("No notes file found. Create one by writing a note.")\n        return []\n    except Exception as e:\n        print(f"Error reading notes: {e}")\n        return []\n\nwrite_note("First note")\nwrite_note("Second note")\nall_notes = read_notes()\nfor i, note in enumerate(all_notes, 1):\n    print(f"{i}. {note}")'
+  },
+  'w1-sat': {
+    title: 'WEEK 1 ASSESSMENT - Build a Complete Program',
+    objective: 'Create a task management system with all concepts',
+    timeLimit: 180,
+    content: '**FINAL CHALLENGE: Task Management System**\n\nBuild a complete program that demonstrates ALL Week 1 concepts:\n\n**Requirements:**\n1. Task class with properties (title, description, completed, priority)\n2. Functions to add, complete, delete, and list tasks\n3. File persistence (save/load from tasks.json)\n4. Error handling for all operations\n5. User menu system\n6. Data validation\n\n**Must include:**\n- Variables & data types\n- Lists & dictionaries\n- Functions with parameters\n- Control flow (loops, conditionals)\n- File handling\n- Exception handling\n\n**Pass criteria: Working program with all features**',
+    starterCode: '# Task Management System\n# Build a complete application\n\nimport json\nfrom datetime import datetime\n\n# Task class or dictionary structure\n# Functions for all CRUD operations\n# File persistence\n# User interface\n# Error handling\n\n# Your complete program here',
+    solution: 'import json\nfrom datetime import datetime\n\nclass TaskManager:\n    def __init__(self, filename="tasks.json"):\n        self.filename = filename\n        self.tasks = self.load_tasks()\n    \n    def load_tasks(self):\n        try:\n            with open(self.filename, "r") as file:\n                return json.load(file)\n        except FileNotFoundError:\n            return []\n        except json.JSONDecodeError:\n            print("Error: Invalid JSON file")\n            return []\n    \n    def save_tasks(self):\n        try:\n            with open(self.filename, "w") as file:\n                json.dump(self.tasks, file, indent=2)\n        except Exception as e:\n            print(f"Error saving tasks: {e}")\n    \n    def add_task(self, title, description="", priority="medium"):\n        if not title.strip():\n            print("Error: Task title cannot be empty")\n            return False\n        \n        task = {\n            "id": len(self.tasks) + 1,\n            "title": title.strip(),\n            "description": description.strip(),\n            "completed": False,\n            "priority": priority.lower(),\n            "created": datetime.now().isoformat()\n        }\n        self.tasks.append(task)\n        self.save_tasks()\n        print(f\'Task "{title}" added successfully\')\n        return True\n\ndef main():\n    print("Task Manager - Simple Version")\n    pass\n\nif __name__ == "__main__":\n    main()'
+  },
+  'w2-mon': {
+    title: 'File I/O & CSV Processing',
+    objective: 'Read/write files, process CSV data',
+    timeLimit: 150,
+    content: 'Working with data files is essential.\n\n**CSV Module:**\n- import csv\n- csv.reader(), csv.writer()\n- csv.DictReader(), csv.DictWriter()\n\n**File Processing:**\n- Reading large files\n- Error handling\n- Data validation\n- Memory efficiency',
+    starterCode: '# CSV data processor\nimport csv\n\n# Read a CSV file and process data\ndef process_csv(input_file, output_file):\n    # Your code here\n    pass',
+    solution: 'import csv\n\ndef process_csv(input_file, output_file):\n    try:\n        with open(input_file, "r") as infile:\n            reader = csv.DictReader(infile)\n            data = list(reader)\n        \n        filtered_data = [row for row in data if int(row.get("age", 0)) > 18]\n        \n        with open(output_file, "w", newline="") as outfile:\n            if filtered_data:\n                writer = csv.DictWriter(outfile, fieldnames=filtered_data[0].keys())\n                writer.writeheader()\n                writer.writerows(filtered_data)\n        \n        print(f"Processed {len(filtered_data)} records")\n        return True\n    except Exception as e:\n        print(f"Error processing CSV: {e}")\n        return False'
+  },
+  'w2-tue': {
+    title: 'JSON Data Handling',
+    objective: 'Parse and manipulate JSON data',
+    timeLimit: 150,
+    content: 'JSON is the language of APIs.\n\n**JSON Operations:**\n- json.loads(), json.dumps()\n- Working with nested structures\n- Error handling for malformed JSON\n\n**Data Transformation:**\n- Converting between formats\n- Flattening nested data\n- Data validation',
+    starterCode: '# JSON data transformer\nimport json\n\nsample_data = {\n    "users": [\n        {"id": 1, "name": "John", "profile": {"age": 25, "city": "NYC"}},\n        {"id": 2, "name": "Jane", "profile": {"age": 30, "city": "LA"}}\n    ]\n}\n\ndef flatten_users(data):\n    # Your code here\n    pass',
+    solution: 'import json\n\ndef flatten_users(data):\n    flattened = []\n    for user in data.get("users", []):\n        flat_user = {\n            "id": user["id"],\n            "name": user["name"],\n            "age": user["profile"]["age"],\n            "city": user["profile"]["city"]\n        }\n        flattened.append(flat_user)\n    return flattened\n\nsample_data = {\n    "users": [\n        {"id": 1, "name": "John", "profile": {"age": 25, "city": "NYC"}},\n        {"id": 2, "name": "Jane", "profile": {"age": 30, "city": "LA"}}\n    ]\n}\n\nresult = flatten_users(sample_data)\nprint(json.dumps(result, indent=2))'
+  },
+  'w2-wed': {
+    title: 'HTTP Requests & API Basics',
+    objective: 'Make API calls, handle responses',
+    timeLimit: 150,
+    content: 'Connect to the world through APIs.\n\n**Requests Library:**\n- import requests\n- GET, POST, PUT, DELETE\n- Headers and parameters\n- Response handling\n\n**API Best Practices:**\n- Status code checking\n- Error handling\n- Timeout handling',
+    starterCode: '# API client example\nimport requests\n\nclass APIClient:\n    def __init__(self, base_url):\n        self.base_url = base_url\n    \n    def get_data(self, endpoint):\n        # Your code here\n        pass',
+    solution: 'import requests\nfrom typing import Optional\n\nclass APIClient:\n    def __init__(self, base_url: str, timeout: int = 30):\n        self.base_url = base_url.rstrip("/")\n        self.timeout = timeout\n        self.session = requests.Session()\n    \n    def get_data(self, endpoint: str) -> Optional[dict]:\n        try:\n            url = f"{self.base_url}/{endpoint.lstrip(\'/\')}"\n            response = self.session.get(url, timeout=self.timeout)\n            response.raise_for_status()\n            return response.json()\n        except requests.exceptions.RequestException as e:\n            print(f"GET request failed: {e}")\n            return None\n\nclient = APIClient("https://jsonplaceholder.typicode.com")\ndata = client.get_data("posts/1")\nprint(data)'
+  },
+  'w2-thu': {
+    title: 'API Authentication & Rate Limiting',
+    objective: 'Handle API keys, rate limits, pagination',
+    timeLimit: 150,
+    content: 'Production APIs require careful handling.\n\n**Authentication:**\n- API keys in headers\n- Bearer tokens\n- OAuth flows\n\n**Rate Limiting:**\n- Respect rate limits\n- Exponential backoff\n- Queue management',
+    starterCode: '# Advanced API client\nimport requests\nimport time\n\nclass AdvancedAPIClient:\n    def __init__(self, base_url: str, api_key: str):\n        self.base_url = base_url\n        self.api_key = api_key\n    \n    def get_data_with_retry(self, endpoint: str):\n        # Your code here\n        pass',
+    solution: 'import requests\nimport time\nfrom typing import Optional\n\nclass AdvancedAPIClient:\n    def __init__(self, base_url: str, api_key: str):\n        self.base_url = base_url.rstrip("/")\n        self.api_key = api_key\n        self.session = requests.Session()\n        self.session.headers.update({"Authorization": f"Bearer {api_key}"})\n    \n    def get_data_with_retry(self, endpoint: str, max_retries: int = 3) -> Optional[dict]:\n        for attempt in range(max_retries):\n            try:\n                response = self.session.get(f"{self.base_url}/{endpoint}")\n                response.raise_for_status()\n                return response.json()\n            except requests.exceptions.RequestException as e:\n                if attempt < max_retries - 1:\n                    wait_time = 2 ** attempt\n                    print(f"Request failed, retrying in {wait_time}s...")\n                    time.sleep(wait_time)\n                else:\n                    print(f"Request failed after {max_retries} attempts: {e}")\n                    return None\n        return None'
+  },
+  'w2-fri': {
+    title: 'Error Handling & Robust API Calls',
+    objective: 'Production-ready error handling',
+    timeLimit: 150,
+    content: 'Production systems must handle failures gracefully.\n\n**Error Handling:**\n- Network timeouts\n- Connection errors\n- HTTP status codes\n- Malformed responses\n\n**Retry Logic:**\n- Exponential backoff\n- Maximum retry attempts\n- Circuit breaker pattern',
+    starterCode: '# Robust API client\nimport requests\nfrom typing import Optional\n\nclass RobustAPIClient:\n    def __init__(self, base_url: str):\n        self.base_url = base_url\n    \n    def safe_request(self, endpoint: str):\n        # Your code here\n        pass',
+    solution: 'import requests\nimport time\nfrom typing import Optional\n\nclass RobustAPIClient:\n    def __init__(self, base_url: str, max_retries: int = 3):\n        self.base_url = base_url.rstrip("/")\n        self.max_retries = max_retries\n        self.session = requests.Session()\n        self.session.timeout = 30\n    \n    def safe_request(self, endpoint: str) -> Optional[dict]:\n        url = f"{self.base_url}/{endpoint.lstrip(\'/\')}"\n        \n        for attempt in range(self.max_retries):\n            try:\n                response = self.session.get(url)\n                response.raise_for_status()\n                return response.json()\n            except requests.exceptions.RequestException as e:\n                if attempt < self.max_retries - 1:\n                    wait_time = (2 ** attempt) + (time.time() % 1)\n                    time.sleep(wait_time)\n                    continue\n                else:\n                    print(f"Request failed after {self.max_retries} retries: {e}")\n                    return None\n        return None\n\nclient = RobustAPIClient("https://jsonplaceholder.typicode.com")\ndata = client.safe_request("posts/1")\nprint(data)'
+  },
+  'w2-sat': {
+    title: 'Build Weather App with API Integration',
+    objective: 'Complete weather application',
+    timeLimit: 180,
+    content: '**PROJECT: Weather Dashboard**\n\nBuild a complete weather application:\n\n**Requirements:**\n1. Weather API integration\n2. Location-based weather lookup\n3. Error handling for API failures\n4. Data caching to reduce API calls\n5. CSV export of weather history\n6. JSON configuration file\n\n**Pass criteria: Working app with all features**',
+    starterCode: '# Weather App Project\nimport requests\nimport json\nfrom datetime import datetime\n\nclass WeatherApp:\n    def __init__(self, api_key: str):\n        self.api_key = api_key\n        \n    def get_weather(self, city: str):\n        # Your implementation here\n        pass',
+    solution: 'import requests\nimport json\nfrom datetime import datetime\nfrom typing import Optional, Dict\n\nclass WeatherApp:\n    def __init__(self, api_key: str):\n        self.api_key = api_key\n        self.base_url = "https://api.openweathermap.org/data/2.5"\n        self.cache = {}\n    \n    def get_weather(self, city: str) -> Optional[Dict]:\n        if city in self.cache:\n            return self.cache[city]\n        \n        try:\n            url = f"{self.base_url}/weather"\n            params = {"q": city, "appid": self.api_key, "units": "metric"}\n            response = requests.get(url, params=params, timeout=10)\n            response.raise_for_status()\n            \n            data = response.json()\n            weather_data = {\n                "city": data["name"],\n                "temperature": data["main"]["temp"],\n                "description": data["weather"][0]["description"],\n                "timestamp": datetime.now().isoformat()\n            }\n            \n            self.cache[city] = weather_data\n            return weather_data\n        except requests.exceptions.RequestException as e:\n            print(f"Error fetching weather: {e}")\n            return None\n\n# Example usage (requires API key)\n# app = WeatherApp("your-api-key")\n# weather = app.get_weather("London")\n# print(weather)'
+  }
+};
+
+export default function LessonPage({ params }: { params: { id: string } }) {
+  const router = useRouter();
+  const { startLesson, completeLesson } = useProgressStore();
+  const [sessionStarted, setSessionStarted] = useState(false);
+  const [completed, setCompleted] = useState(false);
+  const [code, setCode] = useState('');
+  const [output, setOutput] = useState('');
+  const [startTime, setStartTime] = useState<Date | null>(null);
+  const [timeRemaining, setTimeRemaining] = useState(0);
+
+  const lesson = lessonContent[params.id as keyof typeof lessonContent];
+
+  useEffect(() => {
+    if (lesson && sessionStarted) {
+      setCode(lesson.starterCode);
+      const timer = setInterval(() => {
+        if (startTime) {
+          const elapsed = Math.floor((new Date().getTime() - startTime.getTime()) / 60000);
+          const remaining = lesson.timeLimit - elapsed;
+          setTimeRemaining(Math.max(0, remaining));
+          
+          if (remaining <= 0) {
+            alert('⏰ TIME UP! Session ended.');
+            router.push('/');
+          }
+        }
+      }, 60000);
+
+      return () => clearInterval(timer);
+    }
+  }, [lesson, sessionStarted, startTime, router]);
+
+  if (!lesson) {
+    return (
+      <div style={{ 
+        minHeight: '100vh', 
+        backgroundColor: '#111827', 
+        color: 'white',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}>
+        <div style={{ textAlign: 'center' }}>
+          <h1 style={{ fontSize: '32px', color: '#ef4444', marginBottom: '16px' }}>
+            Lesson Not Found
+          </h1>
+          <button 
+            onClick={() => router.push('/')}
+            style={{
+              backgroundColor: '#6b7280',
+              color: 'white',
+              padding: '16px 32px',
+              border: 'none',
+              borderRadius: '8px',
+              fontSize: '18px',
+              cursor: 'pointer'
+            }}
+          >
+            ← Back to Dashboard
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const sessionMinutes = startTime ? 
+    Math.floor((new Date().getTime() - startTime.getTime()) / 60000) : 0;
+
+  const handleStartSession = () => {
+    setSessionStarted(true);
+    setStartTime(new Date());
+    startLesson(params.id);
+  };
+
+  const handleRunCode = () => {
+    if (code.includes('print(')) {
+      const matches = code.match(/print\(['"](.*?)['"]\)/g);
+      if (matches) {
+        const outputs = matches.map(match => {
+          const content = match.match(/print\(['"](.*?)['"]\)/)?.[1] || '';
+          return content;
+        });
+        setOutput(outputs.join('\n'));
+      } else {
+        setOutput('Code executed successfully');
+      }
+    } else {
+      setOutput('Code executed successfully');
+    }
+  };
+
+  const handleComplete = () => {
+    setCompleted(true);
+    completeLesson(params.id, {
+      difficultyRating: 3,
+      confidenceRating: 4
+    });
+  };
+
+  if (!sessionStarted) {
+    return (
+      <div style={{ 
+        minHeight: '100vh', 
+        backgroundColor: '#111827', 
+        color: 'white',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}>
+        <div style={{
+          backgroundColor: '#1f2937',
+          padding: '48px',
+          borderRadius: '16px',
+          textAlign: 'center',
+          maxWidth: '600px'
+        }}>
+          <h1 style={{ fontSize: '32px', color: '#fcd34d', marginBottom: '16px' }}>
+            {lesson.title}
+          </h1>
+          <p style={{ fontSize: '18px', color: '#9ca3af', marginBottom: '24px' }}>
+            {lesson.objective}
+          </p>
+          <p style={{ color: '#fbbf24', fontWeight: 'bold', marginBottom: '24px' }}>
+            ⚠️ BRUTAL STANDARD: {lesson.timeLimit} minutes maximum
+          </p>
+          <button 
+            onClick={handleStartSession}
+            style={{
+              backgroundColor: '#dc2626',
+              color: 'white',
+              padding: '16px 32px',
+              border: 'none',
+              borderRadius: '8px',
+              fontSize: '18px',
+              fontWeight: 'bold',
+              cursor: 'pointer',
+              marginRight: '16px'
+            }}
+          >
+            🔥 START LESSON
+          </button>
+          <button 
+            onClick={() => router.push('/')}
+            style={{
+              backgroundColor: '#6b7280',
+              color: 'white',
+              padding: '16px 32px',
+              border: 'none',
+              borderRadius: '8px',
+              fontSize: '18px',
+              cursor: 'pointer'
+            }}
+          >
+            ← Back
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (completed) {
+    return (
+      <div style={{ 
+        minHeight: '100vh', 
+        backgroundColor: '#111827', 
+        color: 'white',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}>
+        <div style={{
+          backgroundColor: '#065f46',
+          padding: '48px',
+          borderRadius: '16px',
+          textAlign: 'center',
+          maxWidth: '600px'
+        }}>
+          <h1 style={{ fontSize: '48px', marginBottom: '16px' }}>✅</h1>
+          <h2 style={{ fontSize: '32px', color: '#6ee7b7', marginBottom: '16px' }}>
+            Lesson Completed!
+          </h2>
+          <p style={{ fontSize: '18px', color: '#a7f3d0', marginBottom: '24px' }}>
+            Time taken: {sessionMinutes} minutes
+          </p>
+          <button 
+            onClick={() => router.push('/')}
+            style={{
+              backgroundColor: '#059669',
+              color: 'white',
+              padding: '16px 32px',
+              border: 'none',
+              borderRadius: '8px',
+              fontSize: '18px',
+              fontWeight: 'bold',
+              cursor: 'pointer'
+            }}
+          >
+            🏠 Return to Dashboard
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ 
+      minHeight: '100vh', 
+      backgroundColor: '#111827', 
+      color: 'white'
+    }}>
+      {/* Header */}
+      <div style={{
+        backgroundColor: '#1f2937',
+        padding: '16px 24px',
+        borderBottom: '2px solid #374151',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+      }}>
+        <div>
+          <h1 style={{ fontSize: '24px', color: '#fcd34d', margin: 0 }}>
+            {lesson.title}
+          </h1>
+          <p style={{ color: '#9ca3af', margin: 0, fontSize: '14px' }}>
+            Session: {sessionMinutes} min | Remaining: {timeRemaining} min
+          </p>
+        </div>
+        <div style={{ display: 'flex', gap: '12px' }}>
+          <button 
+            onClick={() => router.push('/')}
+            style={{
+              backgroundColor: '#6b7280',
+              color: 'white',
+              padding: '8px 16px',
+              border: 'none',
+              borderRadius: '6px',
+              fontSize: '14px',
+              cursor: 'pointer'
+            }}
+          >
+            ← Exit
+          </button>
+          <button 
+            onClick={handleComplete}
+            style={{
+              backgroundColor: '#059669',
+              color: 'white',
+              padding: '8px 16px',
+              border: 'none',
+              borderRadius: '6px',
+              fontSize: '14px',
+              fontWeight: 'bold',
+              cursor: 'pointer'
+            }}
+          >
+            ✅ Complete
+          </button>
+        </div>
+      </div>
+
+      <div style={{ display: 'flex', height: 'calc(100vh - 80px)' }}>
+        {/* Content Panel */}
+        <div style={{
+          width: '30%',
+          backgroundColor: '#1f2937',
+          padding: '24px',
+          borderRight: '2px solid #374151',
+          overflowY: 'auto'
+        }}>
+          <h3 style={{ color: '#fbbf24', marginBottom: '16px', fontSize: '18px' }}>
+            📋 Lesson Content
+          </h3>
+          <div style={{ 
+            color: '#d1d5db', 
+            lineHeight: '1.6',
+            fontSize: '14px',
+            whiteSpace: 'pre-line'
+          }}>
+            {lesson.content}
+          </div>
+        </div>
+
+        {/* Code Editor */}
+        <div style={{ width: '45%', display: 'flex', flexDirection: 'column' }}>
+          <div style={{
+            backgroundColor: '#374151',
+            padding: '12px 16px',
+            borderBottom: '1px solid #4b5563',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center'
+          }}>
+            <span style={{ color: '#f3f4f6', fontWeight: 'bold' }}>
+              💻 Code Editor
+            </span>
+            <button 
+              onClick={handleRunCode}
+              style={{
+                backgroundColor: '#059669',
+                color: 'white',
+                padding: '6px 12px',
+                border: 'none',
+                borderRadius: '4px',
+                fontSize: '12px',
+                fontWeight: 'bold',
+                cursor: 'pointer'
+              }}
+            >
+              ▶️ Run
+            </button>
+          </div>
+          <div style={{ flex: 1 }}>
+            <MonacoEditor
+              height="100%"
+              defaultLanguage="python"
+              theme="vs-dark"
+              value={code}
+              onChange={(value) => setCode(value || '')}
+              options={{
+                fontSize: 14,
+                minimap: { enabled: false },
+                lineNumbers: 'on',
+                wordWrap: 'on'
+              }}
+            />
+          </div>
+        </div>
+
+        {/* Output Panel */}
+        <div style={{ width: '25%', display: 'flex', flexDirection: 'column' }}>
+          <div style={{
+            backgroundColor: '#374151',
+            padding: '12px 16px',
+            borderBottom: '1px solid #4b5563'
+          }}>
+            <span style={{ color: '#f3f4f6', fontWeight: 'bold' }}>
+              📺 Output
+            </span>
+          </div>
+          <div style={{
+            flex: 1,
+            backgroundColor: '#000000',
+            padding: '16px',
+            fontFamily: 'monospace',
+            color: '#00ff00',
+            fontSize: '14px',
+            overflowY: 'auto'
+          }}>
+            <pre style={{ margin: 0, whiteSpace: 'pre-wrap' }}>
+              {output || 'Run your code to see output here...'}
+            </pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

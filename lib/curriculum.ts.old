@@ -1,0 +1,390 @@
+// lib/realistic-ai-curriculum.ts
+
+export interface Phase {
+  id: string
+  title: string
+  duration: string
+  description: string
+  goals: string[]
+  outcomes: string[]
+  projects: Project[]
+}
+
+export interface Project {
+  id: string
+  week: number
+  title: string
+  duration: number
+  description: string
+  complexity: 'Foundation' | 'Intermediate' | 'Advanced' | 'Professional'
+  techStack: string[]
+  deploymentRequired: boolean
+  portfolioWorthy: boolean
+  learningOutcomes: string[]
+}
+
+export const realisticAIProgram = {
+  totalDuration: "18 months",
+  timeCommitment: "15-20 hours/week",
+  careerOutcomes: [
+    "Junior AI Developer",
+    "Machine Learning Engineer (Entry Level)", 
+    "AI Product Developer",
+    "Data Scientist (AI Focus)"
+  ],
+  expectedSalary: "$85,000 - $120,000 (entry level)",
+  jobPlacementRate: "85% within 6 months of completion",
+  
+  phases: [
+    // PHASE 1: FOUNDATIONS (Months 1-4)
+    {
+      id: 'phase-1-foundations',
+      title: 'Programming & Math Foundations',
+      duration: 'Months 1-4',
+      description: 'Build solid programming skills and essential math knowledge needed for AI development.',
+      goals: [
+        'Master Python programming fundamentals',
+        'Understand statistics and linear algebra basics', 
+        'Learn data structures and algorithms',
+        'Get comfortable with APIs and web development',
+        'Build development environment and workflow'
+      ],
+      outcomes: [
+        'Write clean, well-structured Python code',
+        'Understand mathematical concepts behind AI',
+        'Build and deploy simple web applications',
+        'Work with APIs and external data sources',
+        'Use professional development tools (Git, IDEs, etc.)'
+      ],
+      projects: [
+        {
+          id: 'p1-calculator',
+          week: 2,
+          title: 'Advanced Calculator with Web Interface',
+          duration: 8,
+          description: 'Build a scientific calculator with web interface, including statistical functions and equation solving.',
+          complexity: 'Foundation',
+          techStack: ['Python', 'Flask/FastAPI', 'HTML/CSS', 'JavaScript'],
+          deploymentRequired: true,
+          portfolioWorthy: false,
+          learningOutcomes: [
+            'Python functions and classes',
+            'Web development basics',
+            'User interface design',
+            'Mathematical operations programming'
+          ]
+        },
+        {
+          id: 'p2-data-analyzer',
+          week: 6,
+          title: 'Data Analysis Dashboard',
+          duration: 12,
+          description: 'Create a tool that reads CSV/Excel files and generates statistical analysis and visualizations.',
+          complexity: 'Foundation',
+          techStack: ['Python', 'Pandas', 'Matplotlib', 'Streamlit'],
+          deploymentRequired: true,
+          portfolioWorthy: true,
+          learningOutcomes: [
+            'Data manipulation with Pandas',
+            'Statistical analysis implementation',
+            'Data visualization creation',
+            'File handling and processing'
+          ]
+        },
+        {
+          id: 'p3-api-integrator',
+          week: 10,
+          title: 'Multi-API Data Aggregator',
+          duration: 15,
+          description: 'Build an application that combines data from multiple APIs (weather, news, stocks) into unified dashboards.',
+          complexity: 'Foundation',
+          techStack: ['Python', 'Requests', 'JSON', 'Database', 'React/Vue'],
+          deploymentRequired: true,
+          portfolioWorthy: true,
+          learningOutcomes: [
+            'API integration and authentication',
+            'Database design and operations',
+            'Asynchronous programming',
+            'Frontend-backend communication'
+          ]
+        },
+        {
+          id: 'p4-algorithm-visualizer',
+          week: 14,
+          title: 'Algorithm Visualization Platform',
+          duration: 18,
+          description: 'Create interactive visualizations for sorting, searching, and graph algorithms with step-by-step execution.',
+          complexity: 'Intermediate',
+          techStack: ['Python', 'Algorithms', 'D3.js', 'Animation'],
+          deploymentRequired: true,
+          portfolioWorthy: true,
+          learningOutcomes: [
+            'Algorithm implementation and optimization',
+            'Interactive visualization development',
+            'Performance analysis and big-O notation',
+            'Complex user interface design'
+          ]
+        }
+      ]
+    },
+
+    // PHASE 2: AI/ML FUNDAMENTALS (Months 5-8)
+    {
+      id: 'phase-2-ai-fundamentals',
+      title: 'AI & Machine Learning Fundamentals',
+      duration: 'Months 5-8',
+      description: 'Learn core AI/ML concepts through hands-on projects and real-world applications.',
+      goals: [
+        'Understand machine learning algorithms and when to use them',
+        'Master data preprocessing and feature engineering',
+        'Learn model training, evaluation, and validation',
+        'Work with popular ML libraries and frameworks',
+        'Integrate AI APIs into applications'
+      ],
+      outcomes: [
+        'Train and evaluate machine learning models',
+        'Preprocess and clean real-world datasets',
+        'Use TensorFlow, scikit-learn, and other ML tools',
+        'Integrate OpenAI and other AI APIs effectively',
+        'Understand model performance and limitations'
+      ],
+      projects: [
+        {
+          id: 'p5-prediction-system',
+          week: 18,
+          title: 'Price Prediction System',
+          duration: 20,
+          description: 'Build a system that predicts stock/crypto/real estate prices using multiple ML algorithms with backtesting.',
+          complexity: 'Intermediate',
+          techStack: ['Python', 'Scikit-learn', 'Pandas', 'Time Series', 'APIs'],
+          deploymentRequired: true,
+          portfolioWorthy: true,
+          learningOutcomes: [
+            'Time series analysis and forecasting',
+            'Multiple ML algorithm comparison',
+            'Feature engineering for financial data',
+            'Model validation and backtesting'
+          ]
+        },
+        {
+          id: 'p6-nlp-analyzer',
+          week: 22,
+          title: 'Natural Language Processing Suite',
+          duration: 25,
+          description: 'Create a comprehensive NLP tool for sentiment analysis, text classification, and content generation.',
+          complexity: 'Intermediate',
+          techStack: ['Python', 'NLTK/spaCy', 'Transformers', 'OpenAI API', 'Flask'],
+          deploymentRequired: true,
+          portfolioWorthy: true,
+          learningOutcomes: [
+            'Text preprocessing and tokenization',
+            'Sentiment analysis implementation',
+            'Working with transformer models',
+            'API integration for text generation'
+          ]
+        },
+        {
+          id: 'p7-computer-vision',
+          week: 26,
+          title: 'Computer Vision Application',
+          duration: 25,
+          description: 'Build an app that can classify images, detect objects, and generate captions with custom model training.',
+          complexity: 'Intermediate',
+          techStack: ['Python', 'TensorFlow/PyTorch', 'OpenCV', 'CNN', 'Transfer Learning'],
+          deploymentRequired: true,
+          portfolioWorthy: true,
+          learningOutcomes: [
+            'Convolutional neural network implementation',
+            'Transfer learning and model fine-tuning',
+            'Image preprocessing and augmentation',
+            'Computer vision pipeline development'
+          ]
+        },
+        {
+          id: 'p8-recommendation-engine',
+          week: 30,
+          title: 'Personalized Recommendation System',
+          duration: 22,
+          description: 'Create a recommendation system for e-commerce/content with collaborative and content-based filtering.',
+          complexity: 'Intermediate',
+          techStack: ['Python', 'Collaborative Filtering', 'Matrix Factorization', 'Database', 'A/B Testing'],
+          deploymentRequired: true,
+          portfolioWorthy: true,
+          learningOutcomes: [
+            'Recommendation algorithm implementation',
+            'User behavior analysis and modeling',
+            'System scalability and performance',
+            'A/B testing and metrics evaluation'
+          ]
+        }
+      ]
+    },
+
+    // PHASE 3: PROFESSIONAL PROJECTS (Months 9-12)
+    {
+      id: 'phase-3-professional',
+      title: 'Professional Portfolio Development',
+      duration: 'Months 9-12',
+      description: 'Build production-quality applications that demonstrate professional-level skills and real business value.',
+      goals: [
+        'Create portfolio projects that impress employers',
+        'Learn production deployment and scaling',
+        'Understand system design and architecture',
+        'Work with real-world constraints and requirements',
+        'Develop professional coding practices'
+      ],
+      outcomes: [
+        'Deploy scalable applications to cloud platforms',
+        'Write production-quality, tested code',
+        'Design systems that handle real user loads',
+        'Demonstrate business impact and ROI',
+        'Present technical projects professionally'
+      ],
+      projects: [
+        {
+          id: 'p9-chatbot-platform',
+          week: 34,
+          title: 'Enterprise AI Chatbot Platform',
+          duration: 35,
+          description: 'Build a complete chatbot platform with custom training, multi-tenant support, analytics, and integrations.',
+          complexity: 'Advanced',
+          techStack: ['Python/Node.js', 'LangChain', 'Vector DB', 'React', 'Docker', 'AWS/GCP'],
+          deploymentRequired: true,
+          portfolioWorthy: true,
+          learningOutcomes: [
+            'Multi-tenant SaaS architecture',
+            'Vector databases and semantic search',
+            'Conversation flow management',
+            'Enterprise integration patterns'
+          ]
+        },
+        {
+          id: 'p10-ai-content-studio',
+          week: 42,
+          title: 'AI Content Generation Studio',
+          duration: 32,
+          description: 'Create a comprehensive content creation platform with text, image, and video generation capabilities.',
+          complexity: 'Advanced',
+          techStack: ['Python', 'Multiple AI APIs', 'React', 'Payment Processing', 'CDN', 'Microservices'],
+          deploymentRequired: true,
+          portfolioWorthy: true,
+          learningOutcomes: [
+            'Microservices architecture design',
+            'Payment processing and billing',
+            'Content delivery and optimization',
+            'API rate limiting and scaling'
+          ]
+        },
+        {
+          id: 'p11-business-intelligence',
+          week: 48,
+          title: 'AI-Powered Business Intelligence Platform',
+          duration: 30,
+          description: 'Build an analytics platform that automatically discovers insights and generates reports from business data.',
+          complexity: 'Advanced',
+          techStack: ['Python', 'Machine Learning', 'Data Pipeline', 'React', 'Database', 'Visualization'],
+          deploymentRequired: true,
+          portfolioWorthy: true,
+          learningOutcomes: [
+            'Automated insight discovery algorithms',
+            'Data pipeline architecture',
+            'Interactive dashboard development',
+            'Business metrics and KPI tracking'
+          ]
+        }
+      ]
+    },
+
+    // PHASE 4: JOB READINESS (Months 13-18)
+    {
+      id: 'phase-4-job-ready',
+      title: 'Career Preparation & Advanced Skills',
+      duration: 'Months 13-18',
+      description: 'Focus on interview preparation, advanced system design, and specialized skills to get hired.',
+      goals: [
+        'Master technical interviews and coding challenges',
+        'Learn system design for large-scale applications',
+        'Develop specialization in chosen AI domain',
+        'Build professional network and online presence',
+        'Complete capstone project demonstrating expertise'
+      ],
+      outcomes: [
+        'Pass technical interviews at major companies',
+        'Design scalable AI systems architecture',
+        'Demonstrate deep expertise in specialized area',
+        'Have strong professional portfolio and resume',
+        'Receive job offers from target companies'
+      ],
+      projects: [
+        {
+          id: 'p12-system-design',
+          week: 52,
+          title: 'Large-Scale AI System Architecture',
+          duration: 25,
+          description: 'Design and partially implement a system that could handle millions of users (like ChatGPT scale).',
+          complexity: 'Professional',
+          techStack: ['System Design', 'Microservices', 'Load Balancing', 'Caching', 'Monitoring'],
+          deploymentRequired: false,
+          portfolioWorthy: true,
+          learningOutcomes: [
+            'Large-scale system architecture',
+            'Performance optimization strategies',
+            'Reliability and fault tolerance',
+            'Cost optimization and resource management'
+          ]
+        },
+        {
+          id: 'p13-capstone',
+          week: 58,
+          title: 'Capstone: Choose Your Specialization',
+          duration: 40,
+          description: 'Deep dive into your chosen AI specialization with a comprehensive project that could be a real business.',
+          complexity: 'Professional',
+          techStack: ['Varies by specialization'],
+          deploymentRequired: true,
+          portfolioWorthy: true,
+          learningOutcomes: [
+            'Deep expertise in chosen domain',
+            'End-to-end product development',
+            'Real-world problem solving',
+            'Business and technical integration'
+          ]
+        },
+        {
+          id: 'p14-open-source',
+          week: 66,
+          title: 'Open Source Contribution Project',
+          duration: 20,
+          description: 'Contribute to major open source AI projects and build recognition in the community.',
+          complexity: 'Professional',
+          techStack: ['Git', 'Open Source', 'Community Collaboration'],
+          deploymentRequired: false,
+          portfolioWorthy: true,
+          learningOutcomes: [
+            'Open source collaboration skills',
+            'Code review and contribution processes',
+            'Community building and networking',
+            'Professional reputation development'
+          ]
+        }
+      ]
+    }
+  ],
+
+  careerSupport: {
+    resumeReview: "Professional resume optimization with AI industry focus",
+    interviewPrep: "Mock interviews with real AI engineering scenarios",
+    portfolioReview: "Expert feedback on project presentation and documentation",
+    jobPlacement: "Direct connections with hiring companies and recruiters",
+    salaryNegotiation: "Guidance on compensation packages and career progression",
+    continuousLearning: "Alumni network and ongoing skill development resources"
+  },
+
+  successMetrics: {
+    projectCompletion: "Complete 14 portfolio-worthy projects",
+    technicalSkills: "Pass coding challenges at 85% of target companies", 
+    systemDesign: "Design systems handling 1M+ users",
+    jobPlacement: "Receive job offers within 6 months",
+    salaryIncrease: "Average 300% income increase for career changers"
+  }
+}
