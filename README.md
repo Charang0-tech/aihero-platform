@@ -1,16 +1,18 @@
-🧠 AIHero Platform - Brutal AI Education System
+# 🧠 AIHero Learning Platform
 
-**From Zero to AI Developer in 14 weeks. No hand-holding. No participation trophies.**
+**AI Learning Platform for Career Transformation - From Zero to AI Developer**
 
-![AIHero Platform](https://img.shields.io/badge/Status-Working%20MVP-brightgreen)
-![Next.js](https://img.shields.io/badge/Next.js-14-black)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.4-blue)
-![Monaco Editor](https://img.shields.io/badge/Monaco%20Editor-Integrated-purple)
+## 🚀 Status
+✅ Build Ready - TypeScript Compilation Successful  
+🔄 Deploying to Vercel Next
 
-## 🔥 **LIVE DEMO**
+## 🛠 Tech Stack
+- Next.js 14.2.32 + TypeScript
+- Tailwind CSS + Zustand  
+- Supabase (In Setup)
 
+## 🏃‍♂️ Quick Start
 ```bash
-git clone https://github.com/Charang0-tech/aihero-platform.git
-cd aihero-platform
 npm install
 npm run dev
+npm run build
