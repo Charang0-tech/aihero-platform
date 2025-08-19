@@ -891,3 +891,53 @@ export function getAccessibleWeeks(userTier: 'free' | 'intermediate' | 'advanced
   const maxWeek = SUBSCRIPTION_TIERS[userTier].maxWeek
   return curriculum.filter(week => week.week <= maxWeek)
 }
+
+// Missing functions for LessonCard compatibility
+export function getLessonsByWeek(weekNumber: number): Lesson[] {
+  const week = getWeekById(weekNumber)
+  return week ? week.lessons : []
+}
+
+export function getCurrentLesson(userTier: 'free' | 'intermediate' | 'advanced' = 'free'): Lesson | null {
+  const accessibleWeeks = getAccessibleWeeks(userTier)
+  
+  for (const week of accessibleWeeks) {
+    for (const lesson of week.lessons) {
+      if (!lesson.locked) {
+        return lesson
+      }
+    }
+  }
+  
+  return null
+}
+
+export function getNextLesson(currentLessonId: string, userTier: 'free' | 'intermediate' | 'advanced' = 'free'): Lesson | null {
+  const accessibleWeeks = getAccessibleWeeks(userTier)
+  let foundCurrent = false
+  
+  for (const week of accessibleWeeks) {
+    for (const lesson of week.lessons) {
+      if (foundCurrent && !lesson.locked) {
+        return lesson
+      }
+      if (lesson.id === currentLessonId) {
+        foundCurrent = true
+      }
+    }
+  }
+  
+  return null
+}
+
+export function getWeekProgress(weekNumber: number): { completed: number; total: number; percentage: number } {
+  const week = getWeekById(weekNumber)
+  if (!week) return { completed: 0, total: 0, percentage: 0 }
+  
+  const total = week.lessons.length
+  const completed = 0
+  const percentage = total > 0 ? Math.round((completed / total) * 100) : 0
+  
+  return { completed, total, percentage }
+}
+
