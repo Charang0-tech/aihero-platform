@@ -217,10 +217,65 @@ function StreakCounter({ currentStreak, longestStreak }: any) {
   )
 }
 
-// Quick Actions Component - DISABLED FOR BUILD
+// Quick Actions Component
 function QuickActions() {
-  return null // Temporarily disabled
-}// Recent Achievements Component
+  const { currentWeek, currentDay, exportData } = useProgressStore()
+  
+  const handleExportData = () => {
+    const data = exportData()
+    const blob = new Blob([data], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `aihero-progress-${new Date().toISOString().split('T')[0]}.json`
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+  }
+  
+  return (
+    <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
+      <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+        <Rocket className="w-5 h-5 text-blue-400" />
+        Quick Actions
+      </h3>
+      
+      <div className="space-y-3">
+        <button 
+          onClick={() => {
+            const currentLesson = getCurrentLesson(currentWeek, currentDay)
+            if (currentLesson) {
+              window.location.href = `/lesson/${currentLesson.id}`
+            }
+          }}
+          className="w-full bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-300 flex items-center justify-center gap-2"
+        >
+          <Play className="w-4 h-4" />
+          Continue Today's Lesson
+        </button>
+        
+        <button 
+          onClick={() => window.location.href = '/analytics'}
+          className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-300 flex items-center justify-center gap-2"
+        >
+          <BarChart3 className="w-4 h-4" />
+          View Analytics
+        </button>
+        
+        <button 
+          onClick={handleExportData}
+          className="w-full bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-300 flex items-center justify-center gap-2"
+        >
+          <Download className="w-4 h-4" />
+          Export Progress
+        </button>
+      </div>
+    </div>
+  )
+}
+
+// Recent Achievements Component
 function RecentAchievements({ achievements }: any) {
   const recentAchievements = achievements.slice(-3)
   
@@ -361,10 +416,10 @@ export default function Dashboard() {
   const [currentTime, setCurrentTime] = useState(new Date())
   
   const {
-    // currentWeek removed,
-    // currentDay removed,
-    // totalHoursLogged replaced
-    // totalSessionsCompleted replaced
+    currentWeek,
+    currentDay,
+    totalHoursLogged,
+    totalSessionsCompleted,
     consecutiveDays,
     lessons,
     totalXP,
@@ -379,7 +434,7 @@ export default function Dashboard() {
     masteredTopics,
     setUserId,
     syncWithDatabase
-  userStats, currentLessonId } = useProgressStore()
+  } = useProgressStore()
 
   // Initialize user and sync data
   useEffect(() => {

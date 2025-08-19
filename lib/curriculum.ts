@@ -1,943 +1,692 @@
-// lib/curriculum.ts - Updated for Freemium Model
+// lib/curriculum-complete.ts
+// AIHERO COMPLETE 84-WEEK CAREER TRANSFORMATION PROGRAM
+// From Zero to Advanced AI Engineer in 1.6 Years
+// 504 Total Lessons (6 days/week × 84 weeks)
+// 2,100+ Total Hours of Training
 
 export interface Lesson {
-  id: string
-  week: number
-  day: string
-  title: string
-  duration: number // minutes
-  target: string
-  deliverable: string
-  passCriteria?: string
-  difficulty: number // 1-5
-  isPortfolioWorthy: boolean
-  locked: boolean
-  tier: 'free' | 'intermediate' | 'advanced'
-  concepts: string[]
-  replitProject?: string
+  id: string;
+  week: number;
+  day: string;
+  title: string;
+  duration: number; // minutes
+  target: string;
+  deliverable: string;
+  passCriteria: string;
+  difficulty: number; // 1-10 scale
+  stage: 'BASIC' | 'INTERMEDIATE' | 'ADVANCED';
+  mathPrep?: string;
+  labEnabled?: boolean;
+  codeExecution?: boolean;
+  assessmentType?: 'quiz' | 'coding' | 'project' | 'mixed' | 'certification';
+  prerequisites?: string[];
+  resources?: string[];
 }
 
-export interface Week {
-  week: number
-  title: string
-  focus: string
-  tier: 'free' | 'intermediate' | 'advanced'
-  lessons: Lesson[]
+export interface WeekMetadata {
+  week: number;
+  stage: 'BASIC' | 'INTERMEDIATE' | 'ADVANCED';
+  module: string;
+  theme: string;
+  mathRequired: boolean;
+  dropoutRisk: 'low' | 'medium' | 'high' | 'critical';
+  preparationRequired?: string[];
+  estimatedCompletionRate?: number;
 }
+
+// ============================================
+// STAGE DEFINITIONS
+// ============================================
+
+export const PROGRAM_STAGES = {
+  BASIC: {
+    name: 'Foundation Stage',
+    weeks: [1, 28],
+    duration: '28 weeks',
+    hours: 700,
+    description: 'From zero to competent Python developer with AI fundamentals',
+    outcome: 'Can build basic AI applications and understand core concepts',
+    modules: [
+      'Python Mastery',
+      'Computer Science Fundamentals',
+      'Mathematics for AI',
+      'Data Structures & Algorithms',
+      'Web Development Basics',
+      'Database Fundamentals',
+      'API Development',
+      'Basic Machine Learning'
+    ]
+  },
+  INTERMEDIATE: {
+    name: 'Professional Stage',
+    weeks: [29, 56],
+    duration: '28 weeks',
+    hours: 700,
+    description: 'From developer to AI/ML practitioner',
+    outcome: 'Can design and implement production ML systems',
+    modules: [
+      'Advanced Python',
+      'Data Science Mastery',
+      'Machine Learning Engineering',
+      'Deep Learning Foundations',
+      'Computer Vision',
+      'Natural Language Processing',
+      'MLOps & Deployment',
+      'Cloud Architectures'
+    ]
+  },
+  ADVANCED: {
+    name: 'Mastery Stage',
+    weeks: [57, 84],
+    duration: '28 weeks',
+    hours: 700,
+    description: 'From practitioner to AI architect and innovator',
+    outcome: 'Can architect enterprise AI solutions and lead AI teams',
+    modules: [
+      'Advanced Deep Learning',
+      'Transformers & LLMs',
+      'Reinforcement Learning',
+      'AI System Architecture',
+      'Research & Development',
+      'AI Ethics & Governance',
+      'Leadership & Team Building',
+      'Capstone Projects'
+    ]
+  }
+} as const;
+
+// ============================================
+// BASIC STAGE: WEEKS 1-28 (Foundation)
+// ============================================
+
+const BASIC_STAGE_CURRICULUM = {
+  // Module 1: Python Fundamentals (Weeks 1-4)
+  weeks_1_4: {
+    module: 'Python Fundamentals',
+    topics: [
+      'Week 1: Python Basics - Variables, Data Types, Control Flow',
+      'Week 2: Functions, Modules, Error Handling',
+      'Week 3: Object-Oriented Programming',
+      'Week 4: File I/O, Regular Expressions, Testing'
+    ],
+    mathConcepts: ['Basic arithmetic', 'Logic operations'],
+    keyDeliverables: ['Console applications', 'Text processors', 'Data validators']
+  },
+
+  // Module 2: Computer Science Foundations (Weeks 5-8)
+  weeks_5_8: {
+    module: 'Computer Science Foundations',
+    topics: [
+      'Week 5: Data Structures - Lists, Stacks, Queues',
+      'Week 6: Trees, Graphs, Hash Tables',
+      'Week 7: Algorithms - Sorting, Searching',
+      'Week 8: Complexity Analysis, Optimization'
+    ],
+    mathConcepts: ['Big O notation', 'Logarithms', 'Combinatorics'],
+    keyDeliverables: ['Algorithm implementations', 'Performance benchmarks']
+  },
+
+  // Module 3: Mathematics for AI (Weeks 9-12)
+  weeks_9_12: {
+    module: 'Mathematics for AI',
+    topics: [
+      'Week 9: Linear Algebra - Vectors, Matrices',
+      'Week 10: Calculus - Derivatives, Gradients',
+      'Week 11: Statistics - Distributions, Hypothesis Testing',
+      'Week 12: Probability Theory & Bayes Theorem'
+    ],
+    mathConcepts: ['Linear transformations', 'Partial derivatives', 'Statistical inference'],
+    preparationRequired: [
+      'Khan Academy Linear Algebra',
+      '3Blue1Brown Essence of Calculus',
+      'Statistics in Plain English'
+    ],
+    keyDeliverables: ['Math library implementations', 'Statistical analyzers']
+  },
+
+  // Module 4: Web & Database Development (Weeks 13-16)
+  weeks_13_16: {
+    module: 'Web & Database Development',
+    topics: [
+      'Week 13: HTML, CSS, JavaScript Basics',
+      'Week 14: React/Next.js Fundamentals',
+      'Week 15: SQL & Database Design',
+      'Week 16: NoSQL & Data Modeling'
+    ],
+    mathConcepts: ['Set theory', 'Relational algebra'],
+    keyDeliverables: ['Full-stack web applications', 'Database schemas']
+  },
+
+  // Module 5: API & Backend Development (Weeks 17-20)
+  weeks_17_20: {
+    module: 'API & Backend Development',
+    topics: [
+      'Week 17: RESTful API Design',
+      'Week 18: Authentication & Security',
+      'Week 19: Microservices Architecture',
+      'Week 20: Message Queues & Event-Driven Systems'
+    ],
+    mathConcepts: ['Graph theory', 'Network algorithms'],
+    keyDeliverables: ['Production APIs', 'Distributed systems']
+  },
+
+  // Module 6: Introduction to Machine Learning (Weeks 21-24)
+  weeks_21_24: {
+    module: 'Introduction to Machine Learning',
+    topics: [
+      'Week 21: ML Fundamentals & scikit-learn',
+      'Week 22: Supervised Learning - Regression',
+      'Week 23: Supervised Learning - Classification',
+      'Week 24: Model Evaluation & Validation'
+    ],
+    mathConcepts: ['Loss functions', 'Optimization', 'Cross-validation'],
+    keyDeliverables: ['ML pipelines', 'Predictive models']
+  },
+
+  // Module 7: Data Engineering (Weeks 25-28)
+  weeks_25_28: {
+    module: 'Data Engineering',
+    topics: [
+      'Week 25: ETL Pipelines & Data Warehousing',
+      'Week 26: Stream Processing & Real-time Analytics',
+      'Week 27: Big Data Tools - Spark, Hadoop',
+      'Week 28: Data Quality & Governance'
+    ],
+    mathConcepts: ['Sampling theory', 'Time series analysis'],
+    keyDeliverables: ['Data pipelines', 'Analytics dashboards']
+  }
+};
+
+// ============================================
+// INTERMEDIATE STAGE: WEEKS 29-56 (Professional)
+// ============================================
+
+const INTERMEDIATE_STAGE_CURRICULUM = {
+  // Module 8: Advanced Python & Software Engineering (Weeks 29-32)
+  weeks_29_32: {
+    module: 'Advanced Python & Software Engineering',
+    topics: [
+      'Week 29: Design Patterns & Architecture',
+      'Week 30: Async Programming & Concurrency',
+      'Week 31: Performance Optimization',
+      'Week 32: Testing & CI/CD'
+    ],
+    mathConcepts: ['Queue theory', 'Parallel algorithms'],
+    keyDeliverables: ['Production-grade applications', 'CI/CD pipelines']
+  },
+
+  // Module 9: Data Science Mastery (Weeks 33-36)
+  weeks_33_36: {
+    module: 'Data Science Mastery',
+    topics: [
+      'Week 33: Pandas & NumPy Advanced',
+      'Week 34: Feature Engineering',
+      'Week 35: Dimensionality Reduction',
+      'Week 36: Time Series Analysis'
+    ],
+    mathConcepts: ['PCA', 'Fourier transforms', 'ARIMA models'],
+    keyDeliverables: ['Data science pipelines', 'Forecasting models']
+  },
+
+  // Module 10: Machine Learning Engineering (Weeks 37-40)
+  weeks_37_40: {
+    module: 'Machine Learning Engineering',
+    topics: [
+      'Week 37: Ensemble Methods & Boosting',
+      'Week 38: Unsupervised Learning',
+      'Week 39: Semi-supervised & Active Learning',
+      'Week 40: AutoML & Hyperparameter Tuning'
+    ],
+    mathConcepts: ['Information theory', 'Clustering algorithms'],
+    keyDeliverables: ['Production ML systems', 'AutoML pipelines']
+  },
+
+  // Module 11: Deep Learning Foundations (Weeks 41-44)
+  weeks_41_44: {
+    module: 'Deep Learning Foundations',
+    topics: [
+      'Week 41: Neural Networks & Backpropagation',
+      'Week 42: CNNs for Computer Vision',
+      'Week 43: RNNs & LSTMs for Sequences',
+      'Week 44: Autoencoders & GANs'
+    ],
+    mathConcepts: ['Chain rule', 'Convolutions', 'Gradient descent'],
+    preparationRequired: ['3Blue1Brown Neural Networks', 'Fast.ai Course'],
+    keyDeliverables: ['Deep learning models', 'Image classifiers']
+  },
+
+  // Module 12: Computer Vision (Weeks 45-48)
+  weeks_45_48: {
+    module: 'Computer Vision',
+    topics: [
+      'Week 45: Image Processing & OpenCV',
+      'Week 46: Object Detection - YOLO, R-CNN',
+      'Week 47: Semantic Segmentation',
+      'Week 48: Video Analysis & Tracking'
+    ],
+    mathConcepts: ['Image kernels', 'Spatial transformations'],
+    keyDeliverables: ['Vision applications', 'Real-time detectors']
+  },
+
+  // Module 13: Natural Language Processing (Weeks 49-52)
+  weeks_49_52: {
+    module: 'Natural Language Processing',
+    topics: [
+      'Week 49: Text Processing & Embeddings',
+      'Week 50: Named Entity Recognition & POS Tagging',
+      'Week 51: Sentiment Analysis & Classification',
+      'Week 52: Machine Translation & Summarization'
+    ],
+    mathConcepts: ['Vector spaces', 'Attention mechanisms'],
+    keyDeliverables: ['NLP applications', 'Text analyzers']
+  },
+
+  // Module 14: MLOps & Deployment (Weeks 53-56)
+  weeks_53_56: {
+    module: 'MLOps & Deployment',
+    topics: [
+      'Week 53: Model Versioning & Experiment Tracking',
+      'Week 54: Containerization & Orchestration',
+      'Week 55: Model Serving & APIs',
+      'Week 56: Monitoring & A/B Testing'
+    ],
+    mathConcepts: ['Statistical testing', 'Drift detection'],
+    keyDeliverables: ['MLOps pipelines', 'Production deployments']
+  }
+};
+
+// ============================================
+// ADVANCED STAGE: WEEKS 57-84 (Mastery)
+// ============================================
+
+const ADVANCED_STAGE_CURRICULUM = {
+  // Module 15: Advanced Deep Learning (Weeks 57-60)
+  weeks_57_60: {
+    module: 'Advanced Deep Learning',
+    topics: [
+      'Week 57: Transformer Architecture Deep Dive',
+      'Week 58: BERT, GPT, and Modern NLP',
+      'Week 59: Vision Transformers & CLIP',
+      'Week 60: Multimodal Learning'
+    ],
+    mathConcepts: ['Self-attention', 'Cross-attention', 'Positional encoding'],
+    keyDeliverables: ['Custom transformers', 'Multimodal models']
+  },
+
+  // Module 16: Large Language Models (Weeks 61-64)
+  weeks_61_64: {
+    module: 'Large Language Models & GenAI',
+    topics: [
+      'Week 61: LLM Architecture & Training',
+      'Week 62: Prompt Engineering & Fine-tuning',
+      'Week 63: RAG Systems & Vector Databases',
+      'Week 64: LLM Applications & Agents'
+    ],
+    mathConcepts: ['Scaling laws', 'Emergence', 'In-context learning'],
+    keyDeliverables: ['LLM applications', 'AI agents']
+  },
+
+  // Module 17: Reinforcement Learning (Weeks 65-68)
+  weeks_65_68: {
+    module: 'Reinforcement Learning',
+    topics: [
+      'Week 65: RL Fundamentals - MDPs, Value Functions',
+      'Week 66: Q-Learning & Deep Q-Networks',
+      'Week 67: Policy Gradient Methods',
+      'Week 68: Advanced RL - PPO, A3C, AlphaGo'
+    ],
+    mathConcepts: ['Bellman equations', 'Policy optimization'],
+    keyDeliverables: ['RL agents', 'Game-playing AI']
+  },
+
+  // Module 18: AI System Architecture (Weeks 69-72)
+  weeks_69_72: {
+    module: 'AI System Architecture',
+    topics: [
+      'Week 69: Distributed Training & Model Parallelism',
+      'Week 70: Edge AI & Model Compression',
+      'Week 71: Real-time AI Systems',
+      'Week 72: Federated Learning & Privacy'
+    ],
+    mathConcepts: ['Distributed algorithms', 'Quantization theory'],
+    keyDeliverables: ['Scalable AI systems', 'Edge deployments']
+  },
+
+  // Module 19: Research & Innovation (Weeks 73-76)
+  weeks_73_76: {
+    module: 'Research & Innovation',
+    topics: [
+      'Week 73: Reading & Implementing Papers',
+      'Week 74: Experimental Design & Ablation Studies',
+      'Week 75: Novel Architecture Development',
+      'Week 76: Publishing & Open Source'
+    ],
+    mathConcepts: ['Research methodology', 'Statistical significance'],
+    keyDeliverables: ['Research implementations', 'Open source contributions']
+  },
+
+  // Module 20: AI Ethics & Governance (Weeks 77-80)
+  weeks_77_80: {
+    module: 'AI Ethics & Governance',
+    topics: [
+      'Week 77: Bias Detection & Fairness',
+      'Week 78: Explainable AI & Interpretability',
+      'Week 79: AI Safety & Alignment',
+      'Week 80: Regulatory Compliance & Standards'
+    ],
+    mathConcepts: ['Fairness metrics', 'Causal inference'],
+    keyDeliverables: ['Ethical AI frameworks', 'Compliance systems']
+  },
+
+  // Module 21: Capstone Projects (Weeks 81-84)
+  weeks_81_84: {
+    module: 'Capstone Projects & Portfolio',
+    topics: [
+      'Week 81: Enterprise AI Solution Design',
+      'Week 82: End-to-End Implementation',
+      'Week 83: Performance Optimization & Scaling',
+      'Week 84: Presentation & Career Preparation'
+    ],
+    mathConcepts: ['System design', 'Performance analysis'],
+    keyDeliverables: ['Complete AI platform', 'Professional portfolio']
+  }
+};
+
+// ============================================
+// DETAILED LESSON GENERATION
+// ============================================
+
+function generateLessonsForWeek(
+  weekNumber: number,
+  weekTheme: string,
+  stage: 'BASIC' | 'INTERMEDIATE' | 'ADVANCED',
+  mathConcepts?: string[],
+  labEnabled: boolean = true
+): Lesson[] {
+  const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const lessons: Lesson[] = [];
+  
+  // Calculate difficulty based on week number
+  const baseDifficulty = stage === 'BASIC' ? 1 : stage === 'INTERMEDIATE' ? 4 : 7;
+  const weekDifficulty = Math.min(10, baseDifficulty + Math.floor((weekNumber % 28) / 7));
+  
+  days.forEach((day, index) => {
+    const dayNumber = index + 1;
+    const isAssessmentDay = day === 'Saturday';
+    
+    lessons.push({
+      id: `w${weekNumber}-${day.toLowerCase().substring(0, 3)}`,
+      week: weekNumber,
+      day,
+      title: isAssessmentDay ? `Week ${weekNumber} Assessment` : `${weekTheme} - Day ${dayNumber}`,
+      duration: 150, // 2.5 hours
+      target: isAssessmentDay ? 'Complete weekly assessment' : `Master ${weekTheme} concepts`,
+      deliverable: isAssessmentDay ? 'Assessment project' : `Day ${dayNumber} exercises`,
+      passCriteria: isAssessmentDay ? 'Score 80% or higher' : 'Complete all exercises correctly',
+      difficulty: isAssessmentDay ? weekDifficulty + 1 : weekDifficulty,
+      stage,
+      mathPrep: mathConcepts && index === 0 ? mathConcepts.join(', ') : undefined,
+      labEnabled,
+      codeExecution: labEnabled,
+      assessmentType: isAssessmentDay ? 'project' : 'mixed',
+      prerequisites: weekNumber > 1 ? [`Week ${weekNumber - 1} completion`] : []
+    });
+  });
+  
+  return lessons;
+}
+
+// ============================================
+// COMPLETE 84-WEEK CURRICULUM (504 LESSONS)
+// ============================================
+
+export const aiHero84WeekCurriculum = {
+  totalWeeks: 84,
+  totalLessons: 504, // 6 days × 84 weeks
+  totalHours: 2100, // 2.5 hours × 6 days × 84 weeks
+  stages: 3,
+  
+  // Generate all 504 lessons
+  lessons: [
+    // BASIC STAGE (Weeks 1-28)
+    ...generateLessonsForWeek(1, 'Python Installation & Environment Setup', 'BASIC'),
+    ...generateLessonsForWeek(2, 'Variables, Data Types & Basic Operations', 'BASIC'),
+    ...generateLessonsForWeek(3, 'Control Flow & Logic', 'BASIC'),
+    ...generateLessonsForWeek(4, 'Functions & Modules', 'BASIC'),
+    ...generateLessonsForWeek(5, 'Data Structures - Lists & Tuples', 'BASIC'),
+    ...generateLessonsForWeek(6, 'Dictionaries & Sets', 'BASIC'),
+    ...generateLessonsForWeek(7, 'Object-Oriented Programming Basics', 'BASIC'),
+    ...generateLessonsForWeek(8, 'Advanced OOP & Design Patterns', 'BASIC'),
+    ...generateLessonsForWeek(9, 'Linear Algebra Foundations', 'BASIC', ['Vectors', 'Matrices']),
+    ...generateLessonsForWeek(10, 'Calculus for Machine Learning', 'BASIC', ['Derivatives', 'Gradients']),
+    ...generateLessonsForWeek(11, 'Statistics Fundamentals', 'BASIC', ['Distributions', 'Hypothesis Testing']),
+    ...generateLessonsForWeek(12, 'Probability Theory', 'BASIC', ['Bayes Theorem', 'Expectation']),
+    ...generateLessonsForWeek(13, 'Web Development - HTML/CSS', 'BASIC'),
+    ...generateLessonsForWeek(14, 'JavaScript & React Basics', 'BASIC'),
+    ...generateLessonsForWeek(15, 'SQL & Relational Databases', 'BASIC'),
+    ...generateLessonsForWeek(16, 'NoSQL & Data Modeling', 'BASIC'),
+    ...generateLessonsForWeek(17, 'RESTful API Development', 'BASIC'),
+    ...generateLessonsForWeek(18, 'Authentication & Security', 'BASIC'),
+    ...generateLessonsForWeek(19, 'Microservices Architecture', 'BASIC'),
+    ...generateLessonsForWeek(20, 'Event-Driven Systems', 'BASIC'),
+    ...generateLessonsForWeek(21, 'Introduction to Machine Learning', 'BASIC', ['Loss Functions']),
+    ...generateLessonsForWeek(22, 'Linear & Logistic Regression', 'BASIC', ['Gradient Descent']),
+    ...generateLessonsForWeek(23, 'Decision Trees & Random Forests', 'BASIC'),
+    ...generateLessonsForWeek(24, 'Model Evaluation & Cross-Validation', 'BASIC'),
+    ...generateLessonsForWeek(25, 'ETL & Data Pipelines', 'BASIC'),
+    ...generateLessonsForWeek(26, 'Stream Processing', 'BASIC'),
+    ...generateLessonsForWeek(27, 'Big Data Technologies', 'BASIC'),
+    ...generateLessonsForWeek(28, 'Data Governance & Quality', 'BASIC'),
+    
+    // INTERMEDIATE STAGE (Weeks 29-56)
+    ...generateLessonsForWeek(29, 'Software Design Patterns', 'INTERMEDIATE'),
+    ...generateLessonsForWeek(30, 'Async Programming & Concurrency', 'INTERMEDIATE'),
+    ...generateLessonsForWeek(31, 'Performance Optimization', 'INTERMEDIATE'),
+    ...generateLessonsForWeek(32, 'Testing & CI/CD', 'INTERMEDIATE'),
+    ...generateLessonsForWeek(33, 'Advanced Pandas & NumPy', 'INTERMEDIATE'),
+    ...generateLessonsForWeek(34, 'Feature Engineering', 'INTERMEDIATE'),
+    ...generateLessonsForWeek(35, 'Dimensionality Reduction', 'INTERMEDIATE', ['PCA', 't-SNE']),
+    ...generateLessonsForWeek(36, 'Time Series Analysis', 'INTERMEDIATE', ['ARIMA', 'Seasonality']),
+    ...generateLessonsForWeek(37, 'Ensemble Methods', 'INTERMEDIATE'),
+    ...generateLessonsForWeek(38, 'Clustering & Unsupervised Learning', 'INTERMEDIATE'),
+    ...generateLessonsForWeek(39, 'Semi-Supervised Learning', 'INTERMEDIATE'),
+    ...generateLessonsForWeek(40, 'AutoML & Hyperparameter Tuning', 'INTERMEDIATE'),
+    ...generateLessonsForWeek(41, 'Neural Networks Fundamentals', 'INTERMEDIATE', ['Backpropagation']),
+    ...generateLessonsForWeek(42, 'Convolutional Neural Networks', 'INTERMEDIATE', ['Convolutions']),
+    ...generateLessonsForWeek(43, 'Recurrent Neural Networks', 'INTERMEDIATE', ['LSTM', 'GRU']),
+    ...generateLessonsForWeek(44, 'Generative Models - VAE & GAN', 'INTERMEDIATE'),
+    ...generateLessonsForWeek(45, 'Computer Vision - Image Processing', 'INTERMEDIATE'),
+    ...generateLessonsForWeek(46, 'Object Detection', 'INTERMEDIATE'),
+    ...generateLessonsForWeek(47, 'Semantic Segmentation', 'INTERMEDIATE'),
+    ...generateLessonsForWeek(48, 'Video Analysis', 'INTERMEDIATE'),
+    ...generateLessonsForWeek(49, 'NLP - Text Processing', 'INTERMEDIATE'),
+    ...generateLessonsForWeek(50, 'Named Entity Recognition', 'INTERMEDIATE'),
+    ...generateLessonsForWeek(51, 'Sentiment Analysis', 'INTERMEDIATE'),
+    ...generateLessonsForWeek(52, 'Machine Translation', 'INTERMEDIATE'),
+    ...generateLessonsForWeek(53, 'MLOps - Version Control', 'INTERMEDIATE'),
+    ...generateLessonsForWeek(54, 'Containerization & Kubernetes', 'INTERMEDIATE'),
+    ...generateLessonsForWeek(55, 'Model Serving & APIs', 'INTERMEDIATE'),
+    ...generateLessonsForWeek(56, 'Monitoring & A/B Testing', 'INTERMEDIATE'),
+    
+    // ADVANCED STAGE (Weeks 57-84)
+    ...generateLessonsForWeek(57, 'Transformer Architecture', 'ADVANCED', ['Self-Attention']),
+    ...generateLessonsForWeek(58, 'BERT & GPT Models', 'ADVANCED'),
+    ...generateLessonsForWeek(59, 'Vision Transformers', 'ADVANCED'),
+    ...generateLessonsForWeek(60, 'Multimodal Learning', 'ADVANCED'),
+    ...generateLessonsForWeek(61, 'LLM Architecture & Training', 'ADVANCED', ['Scaling Laws']),
+    ...generateLessonsForWeek(62, 'Prompt Engineering & Fine-tuning', 'ADVANCED'),
+    ...generateLessonsForWeek(63, 'RAG Systems', 'ADVANCED'),
+    ...generateLessonsForWeek(64, 'AI Agents & Applications', 'ADVANCED'),
+    ...generateLessonsForWeek(65, 'Reinforcement Learning Basics', 'ADVANCED', ['MDPs', 'Bellman']),
+    ...generateLessonsForWeek(66, 'Deep Q-Learning', 'ADVANCED'),
+    ...generateLessonsForWeek(67, 'Policy Gradient Methods', 'ADVANCED'),
+    ...generateLessonsForWeek(68, 'Advanced RL - AlphaGo & Beyond', 'ADVANCED'),
+    ...generateLessonsForWeek(69, 'Distributed Training', 'ADVANCED'),
+    ...generateLessonsForWeek(70, 'Edge AI & Model Compression', 'ADVANCED'),
+    ...generateLessonsForWeek(71, 'Real-time AI Systems', 'ADVANCED'),
+    ...generateLessonsForWeek(72, 'Federated Learning', 'ADVANCED'),
+    ...generateLessonsForWeek(73, 'Research Paper Implementation', 'ADVANCED'),
+    ...generateLessonsForWeek(74, 'Experimental Design', 'ADVANCED'),
+    ...generateLessonsForWeek(75, 'Novel Architecture Development', 'ADVANCED'),
+    ...generateLessonsForWeek(76, 'Open Source Contribution', 'ADVANCED'),
+    ...generateLessonsForWeek(77, 'AI Bias & Fairness', 'ADVANCED'),
+    ...generateLessonsForWeek(78, 'Explainable AI', 'ADVANCED'),
+    ...generateLessonsForWeek(79, 'AI Safety & Alignment', 'ADVANCED'),
+    ...generateLessonsForWeek(80, 'Regulatory Compliance', 'ADVANCED'),
+    ...generateLessonsForWeek(81, 'Enterprise Solution Design', 'ADVANCED'),
+    ...generateLessonsForWeek(82, 'End-to-End Implementation', 'ADVANCED'),
+    ...generateLessonsForWeek(83, 'Performance & Scaling', 'ADVANCED'),
+    ...generateLessonsForWeek(84, 'Final Project & Certification', 'ADVANCED')
+  ]
+};
+
+// ============================================
+// SUBSCRIPTION TIERS
+// ============================================
 
 export const SUBSCRIPTION_TIERS = {
-  free: {
-    name: "Free Explorer",
-    price: 0,
-    duration: "Forever",
-    features: [
-      "Weeks 1-8: Python & Web Fundamentals",
-      "Basic portfolio projects",
-      "Community support",
-      "Progress tracking"
-    ],
-    color: "emerald",
-    maxWeek: 8
+  FREE: {
+    name: 'Free Trial',
+    maxWeek: 2,
+    features: ['First 2 weeks', 'Basic Python'],
+    price: 0
   },
-  intermediate: {
-    name: "AI Developer",
-    price: 47,
-    duration: "per month", 
-    features: [
-      "Everything in Free",
-      "Weeks 9-16: Machine Learning & AI",
-      "Advanced portfolio projects",
-      "1-on-1 mentorship sessions",
-      "Job placement assistance"
-    ],
-    color: "blue",
-    maxWeek: 16
+  BASIC: {
+    name: 'Foundation',
+    maxWeek: 28,
+    features: ['Complete Basic Stage', '28 weeks', 'Python to ML basics'],
+    price: 497
   },
-  advanced: {
-    name: "AI Engineer Pro",
-    price: 97,
-    duration: "per month",
-    features: [
-      "Everything in AI Developer", 
-      "Weeks 17-24: Advanced AI & Deployment",
-      "Enterprise-level projects",
-      "Weekly live coding sessions",
-      "Direct industry connections",
-      "Lifetime access & updates"
-    ],
-    color: "purple",
-    maxWeek: 24
+  INTERMEDIATE: {
+    name: 'Professional',
+    maxWeek: 56,
+    features: ['Basic + Intermediate', '56 weeks', 'Full ML/DL training'],
+    price: 1497
+  },
+  ADVANCED: {
+    name: 'Mastery',
+    maxWeek: 84,
+    features: ['Complete Program', '84 weeks', 'AI Architect level'],
+    price: 2997
   }
-}
+};
 
-export const curriculum: Week[] = [
-  // FREE TIER - Weeks 1-8
-  {
-    week: 1,
-    title: "Python Fundamentals",
-    focus: "Core programming concepts and syntax",
-    tier: 'free',
-    lessons: [
-      {
-        id: 'w1-mon',
-        week: 1,
-        day: 'Monday',
-        title: 'Python Setup & First Programs',
-        duration: 120,
-        target: 'Write and run your first Python programs',
-        deliverable: 'Personal introduction script with variables',
-        difficulty: 1,
-        isPortfolioWorthy: false,
-        locked: false,
-        tier: 'free',
-        concepts: ['Variables', 'Print statements', 'Basic input/output'],
-        replitProject: 'Python-Fundamentals-Day1'
-      },
-      {
-        id: 'w1-tue',
-        week: 1,
-        day: 'Tuesday', 
-        title: 'Variables & Data Types',
-        duration: 90,
-        target: 'Master Python data types and variable manipulation',
-        deliverable: 'Data type converter program',
-        difficulty: 1,
-        isPortfolioWorthy: false,
-        locked: false,
-        tier: 'free',
-        concepts: ['Strings', 'Integers', 'Floats', 'Booleans', 'Type conversion'],
-        replitProject: 'Variables-DataTypes'
-      },
-      {
-        id: 'w1-wed',
-        week: 1,
-        day: 'Wednesday',
-        title: 'Control Flow: Conditionals',
-        duration: 100,
-        target: 'Implement decision-making logic in programs', 
-        deliverable: 'Interactive decision tree program',
-        difficulty: 2,
-        isPortfolioWorthy: false,
-        locked: false,
-        tier: 'free',
-        concepts: ['If statements', 'Elif chains', 'Boolean logic', 'Comparison operators'],
-        replitProject: 'Control-Flow'
-      },
-      {
-        id: 'w1-thu',
-        week: 1,
-        day: 'Thursday',
-        title: 'Loops & Iteration',
-        duration: 110,
-        target: 'Automate repetitive tasks with loops',
-        deliverable: 'Pattern generator using loops',
-        difficulty: 2,
-        isPortfolioWorthy: false,
-        locked: false,
-        tier: 'free',
-        concepts: ['For loops', 'While loops', 'Range function', 'Loop control'],
-        replitProject: 'Loops-Iteration'
-      },
-      {
-        id: 'w1-fri',
-        week: 1,
-        day: 'Friday',
-        title: 'Functions & Code Organization',
-        duration: 130,
-        target: 'Create reusable code with functions',
-        deliverable: 'Mini calculator with custom functions',
-        difficulty: 2,
-        isPortfolioWorthy: true,
-        locked: false,
-        tier: 'free',
-        concepts: ['Function definition', 'Parameters', 'Return values', 'Scope'],
-        replitProject: 'Functions-CodeOrg'
-      }
-    ]
-  },
-  {
-    week: 2,
-    title: "Data Structures & File Handling", 
-    focus: "Working with collections and external data",
-    tier: 'free',
-    lessons: [
-      {
-        id: 'w2-mon',
-        week: 2,
-        day: 'Monday',
-        title: 'Lists & List Operations',
-        duration: 100,
-        target: 'Master dynamic data collections',
-        deliverable: 'To-do list manager',
-        difficulty: 2,
-        isPortfolioWorthy: false,
-        locked: false,
-        tier: 'free',
-        concepts: ['List creation', 'Indexing', 'Slicing', 'List methods'],
-        replitProject: 'Lists-Operations'
-      },
-      {
-        id: 'w2-tue',
-        week: 2,
-        day: 'Tuesday',
-        title: 'Dictionaries & Data Mapping',
-        duration: 110,
-        target: 'Organize data with key-value pairs',
-        deliverable: 'Student grade book system',
-        difficulty: 2,
-        isPortfolioWorthy: false,
-        locked: false,
-        tier: 'free',
-        concepts: ['Dictionary creation', 'Key access', 'Dictionary methods', 'Nested structures'],
-        replitProject: 'Dictionaries-Mapping'
-      },
-      {
-        id: 'w2-wed',
-        week: 2,
-        day: 'Wednesday',
-        title: 'File Operations & Data Persistence',
-        duration: 120,
-        target: 'Read and write data to external files',
-        deliverable: 'Personal journal with file storage',
-        difficulty: 3,
-        isPortfolioWorthy: true,
-        locked: false,
-        tier: 'free',
-        concepts: ['File reading', 'File writing', 'CSV handling', 'Data persistence'],
-        replitProject: 'File-Operations'
-      },
-      {
-        id: 'w2-thu',
-        week: 2,
-        day: 'Thursday',
-        title: 'Error Handling & Debugging',
-        duration: 90,
-        target: 'Write robust code that handles errors gracefully',
-        deliverable: 'Error-proof input validator',
-        difficulty: 3,
-        isPortfolioWorthy: false,
-        locked: false,
-        tier: 'free',
-        concepts: ['Try-except blocks', 'Exception types', 'Debugging techniques', 'Code testing'],
-        replitProject: 'Error-Handling'
-      },
-      {
-        id: 'w2-fri',
-        week: 2,
-        day: 'Friday',
-        title: 'Project: Personal Expense Tracker',
-        duration: 180,
-        target: 'Build a complete application using week\'s concepts',
-        deliverable: 'Functional expense tracking application',
-        difficulty: 4,
-        isPortfolioWorthy: true,
-        locked: false,
-        tier: 'free',
-        concepts: ['Project integration', 'User interface', 'Data persistence', 'Application flow'],
-        replitProject: 'Expense-Tracker-Project'
-      }
-    ]
-  },
-  {
-    week: 3,
-    title: "Object-Oriented Programming",
-    focus: "Classes, objects, and code structure",
-    tier: 'free',
-    lessons: [
-      {
-        id: 'w3-mon',
-        week: 3,
-        day: 'Monday',
-        title: 'Classes & Objects Fundamentals',
-        duration: 120,
-        target: 'Understand object-oriented programming concepts',
-        deliverable: 'Simple bank account class',
-        difficulty: 3,
-        isPortfolioWorthy: false,
-        locked: false,
-        tier: 'free',
-        concepts: ['Class definition', 'Object instantiation', 'Attributes', 'Methods'],
-        replitProject: 'Classes-Objects'
-      },
-      {
-        id: 'w3-tue',
-        week: 3,
-        day: 'Tuesday',
-        title: 'Inheritance & Polymorphism',
-        duration: 130,
-        target: 'Create class hierarchies and code reuse',
-        deliverable: 'Animal class hierarchy',
-        difficulty: 3,
-        isPortfolioWorthy: false,
-        locked: false,
-        tier: 'free',
-        concepts: ['Inheritance', 'Method overriding', 'Super keyword', 'Polymorphism'],
-        replitProject: 'Inheritance-Polymorphism'
-      },
-      {
-        id: 'w3-wed',
-        week: 3,
-        day: 'Wednesday',
-        title: 'Encapsulation & Data Protection',
-        duration: 100,
-        target: 'Protect and validate object data',
-        deliverable: 'Secure user account system',
-        difficulty: 3,
-        isPortfolioWorthy: false,
-        locked: false,
-        tier: 'free',
-        concepts: ['Private attributes', 'Property decorators', 'Getters/setters', 'Data validation'],
-        replitProject: 'Encapsulation-Protection'
-      },
-      {
-        id: 'w3-thu',
-        week: 3,
-        day: 'Thursday',
-        title: 'Special Methods & Operator Overloading',
-        duration: 110,
-        target: 'Make custom objects behave like built-in types',
-        deliverable: 'Custom vector class with operations',
-        difficulty: 4,
-        isPortfolioWorthy: false,
-        locked: false,
-        tier: 'free',
-        concepts: ['Magic methods', 'String representation', 'Arithmetic operators', 'Comparison operators'],
-        replitProject: 'Special-Methods'
-      },
-      {
-        id: 'w3-fri',
-        week: 3,
-        day: 'Friday',
-        title: 'Project: Library Management System',
-        duration: 200,
-        target: 'Build a complete OOP application',
-        deliverable: 'Full library management system',
-        difficulty: 4,
-        isPortfolioWorthy: true,
-        locked: false,
-        tier: 'free',
-        concepts: ['Multi-class design', 'Object relationships', 'System architecture', 'User interface'],
-        replitProject: 'Library-Management'
-      }
-    ]
-  },
-  {
-    week: 4,
-    title: "Web Development with Flask",
-    focus: "Building web applications and APIs",
-    tier: 'free',
-    lessons: [
-      {
-        id: 'w4-mon',
-        week: 4,
-        day: 'Monday',
-        title: 'Flask Setup & First Web App',
-        duration: 120,
-        target: 'Create and run your first web application',
-        deliverable: 'Personal portfolio website',
-        difficulty: 2,
-        isPortfolioWorthy: false,
-        locked: false,
-        tier: 'free',
-        concepts: ['Flask installation', 'Routes', 'Templates', 'Static files'],
-        replitProject: 'Flask-First-App'
-      },
-      {
-        id: 'w4-tue',
-        week: 4,
-        day: 'Tuesday',
-        title: 'HTML Templates & Dynamic Content',
-        duration: 130,
-        target: 'Create dynamic web pages with templates',
-        deliverable: 'Dynamic blog website',
-        difficulty: 3,
-        isPortfolioWorthy: false,
-        locked: false,
-        tier: 'free',
-        concepts: ['Jinja2 templates', 'Template inheritance', 'Dynamic content', 'Form handling'],
-        replitProject: 'Flask-Templates'
-      },
-      {
-        id: 'w4-wed',
-        week: 4,
-        day: 'Wednesday',
-        title: 'Forms & User Input',
-        duration: 110,
-        target: 'Handle user input and form submissions',
-        deliverable: 'Contact form with validation',
-        difficulty: 3,
-        isPortfolioWorthy: false,
-        locked: false,
-        tier: 'free',
-        concepts: ['HTML forms', 'Form validation', 'POST requests', 'Flash messages'],
-        replitProject: 'Flask-Forms'
-      },
-      {
-        id: 'w4-thu',
-        week: 4,
-        day: 'Thursday',
-        title: 'Database Integration with SQLite',
-        duration: 140,
-        target: 'Store and retrieve data from databases',
-        deliverable: 'User registration system',
-        difficulty: 4,
-        isPortfolioWorthy: false,
-        locked: false,
-        tier: 'free',
-        concepts: ['SQLite basics', 'Database connections', 'CRUD operations', 'User sessions'],
-        replitProject: 'Flask-Database'
-      },
-      {
-        id: 'w4-fri',
-        week: 4,
-        day: 'Friday',
-        title: 'Project: Social Media Platform',
-        duration: 240,
-        target: 'Build a complete social media application',
-        deliverable: 'Mini social media platform',
-        difficulty: 5,
-        isPortfolioWorthy: true,
-        locked: false,
-        tier: 'free',
-        concepts: ['User authentication', 'Post creation', 'Database design', 'Web security'],
-        replitProject: 'Social-Media-Project'
-      }
-    ]
-  },
-  {
-    week: 5,
-    title: "API Development & Integration",
-    focus: "Building and consuming web APIs",
-    tier: 'free',
-    lessons: [
-      {
-        id: 'w5-mon',
-        week: 5,
-        day: 'Monday',
-        title: 'REST API Fundamentals',
-        duration: 120,
-        target: 'Understand and build REST APIs',
-        deliverable: 'Simple task API',
-        difficulty: 3,
-        isPortfolioWorthy: false,
-        locked: false,
-        tier: 'free',
-        concepts: ['REST principles', 'HTTP methods', 'JSON responses', 'API endpoints'],
-        replitProject: 'REST-API-Basics'
-      },
-      {
-        id: 'w5-tue',
-        week: 5,
-        day: 'Tuesday',
-        title: 'API Authentication & Security',
-        duration: 130,
-        target: 'Secure your APIs with authentication',
-        deliverable: 'Secure user API',
-        difficulty: 4,
-        isPortfolioWorthy: false,
-        locked: false,
-        tier: 'free',
-        concepts: ['API keys', 'JWT tokens', 'Authentication middleware', 'CORS'],
-        replitProject: 'API-Authentication'
-      },
-      {
-        id: 'w5-wed',
-        week: 5,
-        day: 'Wednesday',
-        title: 'Consuming External APIs',
-        duration: 110,
-        target: 'Integrate third-party APIs into your applications',
-        deliverable: 'Weather dashboard app',
-        difficulty: 3,
-        isPortfolioWorthy: false,
-        locked: false,
-        tier: 'free',
-        concepts: ['HTTP requests', 'API documentation', 'Error handling', 'Rate limiting'],
-        replitProject: 'External-APIs'
-      },
-      {
-        id: 'w5-thu',
-        week: 5,
-        day: 'Thursday',
-        title: 'API Testing & Documentation',
-        duration: 100,
-        target: 'Test and document your APIs professionally',
-        deliverable: 'Fully documented API',
-        difficulty: 3,
-        isPortfolioWorthy: false,
-        locked: false,
-        tier: 'free',
-        concepts: ['Postman testing', 'API documentation', 'Error codes', 'Testing strategies'],
-        replitProject: 'API-Testing'
-      },
-      {
-        id: 'w5-fri',
-        week: 5,
-        day: 'Friday',
-        title: 'Project: Recipe Sharing API',
-        duration: 200,
-        target: 'Build a complete API-driven application',
-        deliverable: 'Recipe sharing platform with API',
-        difficulty: 5,
-        isPortfolioWorthy: true,
-        locked: false,
-        tier: 'free',
-        concepts: ['Full API design', 'Database integration', 'User management', 'Recipe CRUD'],
-        replitProject: 'Recipe-API-Project'
-      }
-    ]
-  },
-  {
-    week: 6,
-    title: "Data Science Foundations",
-    focus: "Data analysis and visualization",
-    tier: 'free',
-    lessons: [
-      {
-        id: 'w6-mon',
-        week: 6,
-        day: 'Monday',
-        title: 'NumPy for Numerical Computing',
-        duration: 120,
-        target: 'Master numerical operations with NumPy',
-        deliverable: 'Statistical analysis tool',
-        difficulty: 3,
-        isPortfolioWorthy: false,
-        locked: false,
-        tier: 'free',
-        concepts: ['NumPy arrays', 'Mathematical operations', 'Array manipulation', 'Statistical functions'],
-        replitProject: 'NumPy-Basics'
-      },
-      {
-        id: 'w6-tue',
-        week: 6,
-        day: 'Tuesday',
-        title: 'Pandas for Data Manipulation',
-        duration: 140,
-        target: 'Analyze and clean data with Pandas',
-        deliverable: 'Sales data analyzer',
-        difficulty: 3,
-        isPortfolioWorthy: false,
-        locked: false,
-        tier: 'free',
-        concepts: ['DataFrames', 'Data cleaning', 'Filtering', 'Grouping operations'],
-        replitProject: 'Pandas-DataManip'
-      },
-      {
-        id: 'w6-wed',
-        week: 6,
-        day: 'Wednesday',
-        title: 'Data Visualization with Matplotlib',
-        duration: 130,
-        target: 'Create compelling data visualizations',
-        deliverable: 'Interactive dashboard',
-        difficulty: 3,
-        isPortfolioWorthy: false,
-        locked: false,
-        tier: 'free',
-        concepts: ['Charts and plots', 'Customization', 'Subplots', 'Interactive features'],
-        replitProject: 'Data-Visualization'
-      },
-      {
-        id: 'w6-thu',
-        week: 6,
-        day: 'Thursday',
-        title: 'Web Scraping & Data Collection',
-        duration: 120,
-        target: 'Collect data from websites automatically',
-        deliverable: 'News scraper application',
-        difficulty: 4,
-        isPortfolioWorthy: false,
-        locked: false,
-        tier: 'free',
-        concepts: ['BeautifulSoup', 'Web scraping ethics', 'Data extraction', 'Automated collection'],
-        replitProject: 'Web-Scraping'
-      },
-      {
-        id: 'w6-fri',
-        week: 6,
-        day: 'Friday',
-        title: 'Project: Stock Market Analyzer',
-        duration: 220,
-        target: 'Build a complete data analysis application',
-        deliverable: 'Stock market analysis dashboard',
-        difficulty: 5,
-        isPortfolioWorthy: true,
-        locked: false,
-        tier: 'free',
-        concepts: ['Real-time data', 'Technical analysis', 'Data visualization', 'Financial metrics'],
-        replitProject: 'Stock-Analyzer-Project'
-      }
-    ]
-  },
-  {
-    week: 7,
-    title: "Database Design & Management",
-    focus: "Advanced database concepts and optimization",
-    tier: 'free',
-    lessons: [
-      {
-        id: 'w7-mon',
-        week: 7,
-        day: 'Monday',
-        title: 'SQL Fundamentals & Database Design',
-        duration: 130,
-        target: 'Design efficient database schemas',
-        deliverable: 'E-commerce database design',
-        difficulty: 3,
-        isPortfolioWorthy: false,
-        locked: false,
-        tier: 'free',
-        concepts: ['SQL syntax', 'Database normalization', 'Relationships', 'Primary/foreign keys'],
-        replitProject: 'SQL-Fundamentals'
-      },
-      {
-        id: 'w7-tue',
-        week: 7,
-        day: 'Tuesday',
-        title: 'Advanced SQL Queries',
-        duration: 120,
-        target: 'Write complex database queries',
-        deliverable: 'Business intelligence queries',
-        difficulty: 4,
-        isPortfolioWorthy: false,
-        locked: false,
-        tier: 'free',
-        concepts: ['Joins', 'Subqueries', 'Aggregations', 'Window functions'],
-        replitProject: 'Advanced-SQL'
-      },
-      {
-        id: 'w7-wed',
-        week: 7,
-        day: 'Wednesday',
-        title: 'SQLAlchemy ORM',
-        duration: 140,
-        target: 'Use Object-Relational Mapping for databases',
-        deliverable: 'ORM-based application',
-        difficulty: 4,
-        isPortfolioWorthy: false,
-        locked: false,
-        tier: 'free',
-        concepts: ['ORM concepts', 'Model definitions', 'Relationships', 'Query building'],
-        replitProject: 'SQLAlchemy-ORM'
-      },
-      {
-        id: 'w7-thu',
-        week: 7,
-        day: 'Thursday',
-        title: 'Database Optimization & Performance',
-        duration: 110,
-        target: 'Optimize database performance',
-        deliverable: 'Performance optimization report',
-        difficulty: 4,
-        isPortfolioWorthy: false,
-        locked: false,
-        tier: 'free',
-        concepts: ['Indexing', 'Query optimization', 'Performance monitoring', 'Caching strategies'],
-        replitProject: 'DB-Optimization'
-      },
-      {
-        id: 'w7-fri',
-        week: 7,
-        day: 'Friday',
-        title: 'Project: Content Management System',
-        duration: 240,
-        target: 'Build a database-driven CMS',
-        deliverable: 'Full-featured content management system',
-        difficulty: 5,
-        isPortfolioWorthy: true,
-        locked: false,
-        tier: 'free',
-        concepts: ['Complex schema design', 'User roles', 'Content workflows', 'Database migrations'],
-        replitProject: 'CMS-Project'
-      }
-    ]
-  },
-  {
-    week: 8,
-    title: "Deployment & DevOps Basics",
-    focus: "Getting applications live and managing deployments",
-    tier: 'free',
-    lessons: [
-      {
-        id: 'w8-mon',
-        week: 8,
-        day: 'Monday',
-        title: 'Version Control with Git',
-        duration: 120,
-        target: 'Master Git for code collaboration',
-        deliverable: 'Open source contribution',
-        difficulty: 3,
-        isPortfolioWorthy: false,
-        locked: false,
-        tier: 'free',
-        concepts: ['Git basics', 'Branching', 'Merging', 'Collaboration workflows'],
-        replitProject: 'Git-Version-Control'
-      },
-      {
-        id: 'w8-tue',
-        week: 8,
-        day: 'Tuesday',
-        title: 'Docker Containerization',
-        duration: 140,
-        target: 'Package applications with Docker',
-        deliverable: 'Containerized web application',
-        difficulty: 4,
-        isPortfolioWorthy: false,
-        locked: false,
-        tier: 'free',
-        concepts: ['Docker basics', 'Dockerfile creation', 'Container management', 'Docker Compose'],
-        replitProject: 'Docker-Containers'
-      },
-      {
-        id: 'w8-wed',
-        week: 8,
-        day: 'Wednesday',
-        title: 'Cloud Deployment with Heroku',
-        duration: 130,
-        target: 'Deploy applications to the cloud',
-        deliverable: 'Live web application',
-        difficulty: 3,
-        isPortfolioWorthy: false,
-        locked: false,
-        tier: 'free',
-        concepts: ['Cloud platforms', 'Deployment pipelines', 'Environment variables', 'Monitoring'],
-        replitProject: 'Cloud-Deployment'
-      },
-      {
-        id: 'w8-thu',
-        week: 8,
-        day: 'Thursday',
-        title: 'CI/CD & Automated Testing',
-        duration: 120,
-        target: 'Implement continuous integration',
-        deliverable: 'Automated deployment pipeline',
-        difficulty: 4,
-        isPortfolioWorthy: false,
-        locked: false,
-        tier: 'free',
-        concepts: ['GitHub Actions', 'Automated testing', 'Deployment automation', 'Quality gates'],
-        replitProject: 'CICD-Pipeline'
-      },
-      {
-        id: 'w8-fri',
-        week: 8,
-        day: 'Friday',
-        title: 'Portfolio Capstone Project',
-        duration: 300,
-        target: 'Complete a full-stack portfolio project',
-        deliverable: 'Professional portfolio application',
-        difficulty: 5,
-        isPortfolioWorthy: true,
-        locked: false,
-        tier: 'free',
-        concepts: ['Full-stack integration', 'Professional deployment', 'Code documentation', 'Portfolio presentation'],
-        replitProject: 'Portfolio-Capstone'
-      }
-    ]
-  },
-  
-  // INTERMEDIATE TIER - Weeks 9-16
-  {
-    week: 9,
-    title: "Introduction to Machine Learning",
-    focus: "Data science foundations and ML concepts",
-    tier: 'intermediate',
-    lessons: [
-      {
-        id: 'w9-mon',
-        week: 9,
-        day: 'Monday',
-        title: 'ML Fundamentals & Scikit-learn',
-        duration: 150,
-        target: 'Understand machine learning concepts',
-        deliverable: 'First ML prediction model',
-        difficulty: 3,
-        isPortfolioWorthy: false,
-        locked: true,
-        tier: 'intermediate',
-        concepts: ['ML concepts', 'Scikit-learn', 'Model training', 'Predictions'],
-        replitProject: 'ML-Fundamentals'
-      },
-      {
-        id: 'w9-tue',
-        week: 9,
-        day: 'Tuesday',
-        title: 'Supervised Learning: Classification',
-        duration: 160,
-        target: 'Build classification models',
-        deliverable: 'Email spam detector',
-        difficulty: 4,
-        isPortfolioWorthy: false,
-        locked: true,
-        tier: 'intermediate',
-        concepts: ['Classification algorithms', 'Feature engineering', 'Model evaluation', 'Cross-validation'],
-        replitProject: 'Classification-Models'
-      },
-      {
-        id: 'w9-wed',
-        week: 9,
-        day: 'Wednesday',
-        title: 'Supervised Learning: Regression',
-        duration: 150,
-        target: 'Predict continuous values',
-        deliverable: 'House price predictor',
-        difficulty: 4,
-        isPortfolioWorthy: false,
-        locked: true,
-        tier: 'intermediate',
-        concepts: ['Regression algorithms', 'Linear regression', 'Polynomial features', 'Regularization'],
-        replitProject: 'Regression-Models'
-      },
-      {
-        id: 'w9-thu',
-        week: 9,
-        day: 'Thursday',
-        title: 'Unsupervised Learning: Clustering',
-        duration: 140,
-        target: 'Discover patterns in data',
-        deliverable: 'Customer segmentation system',
-        difficulty: 4,
-        isPortfolioWorthy: false,
-        locked: true,
-        tier: 'intermediate',
-        concepts: ['Clustering algorithms', 'K-means', 'Hierarchical clustering', 'Dimensionality reduction'],
-        replitProject: 'Clustering-Analysis'
-      },
-      {
-        id: 'w9-fri',
-        week: 9,
-        day: 'Friday',
-        title: 'Project: Recommendation System',
-        duration: 200,
-        target: 'Build a complete recommendation engine',
-        deliverable: 'Movie recommendation system',
-        difficulty: 5,
-        isPortfolioWorthy: true,
-        locked: true,
-        tier: 'intermediate',
-        concepts: ['Collaborative filtering', 'Content-based filtering', 'Matrix factorization', 'Evaluation metrics'],
-        replitProject: 'Recommendation-System'
-      }
-    ]
-  },
-  
-  // Continue with more intermediate weeks...
-  {
-    week: 10,
-    title: "Deep Learning Foundations",
-    focus: "Neural networks and deep learning basics",
-    tier: 'intermediate',
-    lessons: [
-      {
-        id: 'w10-mon',
-        week: 10,
-        day: 'Monday',
-        title: 'Neural Network Fundamentals',
-        duration: 160,
-        target: 'Understand how neural networks work',
-        deliverable: 'Simple neural network from scratch',
-        difficulty: 4,
-        isPortfolioWorthy: false,
-        locked: true,
-        tier: 'intermediate',
-        concepts: ['Perceptrons', 'Backpropagation', 'Activation functions', 'Gradient descent'],
-        replitProject: 'Neural-Networks'
-      }
-      // ... more lessons for week 10
-    ]
-  },
-  
-  // ADVANCED TIER - Weeks 17-24
-  {
-    week: 17,
-    title: "Advanced Deep Learning",
-    focus: "Complex neural architectures and applications",
-    tier: 'advanced',
-    lessons: [
-      {
-        id: 'w17-mon',
-        week: 17,
-        day: 'Monday',
-        title: 'Convolutional Neural Networks',
-        duration: 180,
-        target: 'Master computer vision with CNNs',
-        deliverable: 'Image classification system',
-        difficulty: 5,
-        isPortfolioWorthy: true,
-        locked: true,
-        tier: 'advanced',
-        concepts: ['CNN architecture', 'Convolution layers', 'Pooling', 'Transfer learning'],
-        replitProject: 'CNN-ImageClassifier'
-      }
-      // ... more advanced lessons
-    ]
-  }
-]
+// ============================================
+// HELPER FUNCTIONS
+// ============================================
+
+export function getLessonsByWeek(week: number): Lesson[] {
+  return aiHero84WeekCurriculum.lessons.filter(lesson => lesson.week === week);
+}
 
 export function getLessonById(id: string): Lesson | undefined {
-  for (const week of curriculum) {
-    const lesson = week.lessons.find(lesson => lesson.id === id)
-    if (lesson) return lesson
-  }
-  return undefined
+  return aiHero84WeekCurriculum.lessons.find(lesson => lesson.id === id);
 }
 
-export function getWeekById(weekNumber: number): Week | undefined {
-  return curriculum.find(week => week.week === weekNumber)
+export function getLessonsByStage(stage: 'BASIC' | 'INTERMEDIATE' | 'ADVANCED'): Lesson[] {
+  return aiHero84WeekCurriculum.lessons.filter(lesson => lesson.stage === stage);
 }
 
-export function getAccessibleWeeks(userTier: 'free' | 'intermediate' | 'advanced'): Week[] {
-  const maxWeek = SUBSCRIPTION_TIERS[userTier].maxWeek
-  return curriculum.filter(week => week.week <= maxWeek)
+export function getCurrentStage(weekNumber: number): 'BASIC' | 'INTERMEDIATE' | 'ADVANCED' {
+  if (weekNumber <= 28) return 'BASIC';
+  if (weekNumber <= 56) return 'INTERMEDIATE';
+  return 'ADVANCED';
 }
 
-// Missing functions for LessonCard compatibility
-export function getLessonsByWeek(weekNumber: number): Lesson[] {
-  const week = getWeekById(weekNumber)
-  return week ? week.lessons : []
-}
-
-export function getCurrentLesson(userTier: 'free' | 'intermediate' | 'advanced' = 'free'): Lesson | null {
-  const accessibleWeeks = getAccessibleWeeks(userTier)
+export function getStageProgress(weekNumber: number): {
+  stage: string;
+  stageWeek: number;
+  stageProgress: number;
+} {
+  const stage = getCurrentStage(weekNumber);
+  const stageWeek = stage === 'BASIC' ? weekNumber : 
+                    stage === 'INTERMEDIATE' ? weekNumber - 28 : 
+                    weekNumber - 56;
+  const stageProgress = Math.round((stageWeek / 28) * 100);
   
-  for (const week of accessibleWeeks) {
-    for (const lesson of week.lessons) {
-      if (!lesson.locked) {
-        return lesson
-      }
-    }
-  }
-  
-  return null
+  return { stage, stageWeek, stageProgress };
 }
 
-export function getNextLesson(currentLessonId: string, userTier: 'free' | 'intermediate' | 'advanced' = 'free'): Lesson | null {
-  const accessibleWeeks = getAccessibleWeeks(userTier)
-  let foundCurrent = false
+export function calculateOverallProgress(completedLessons: string[]): {
+  overall: number;
+  basic: number;
+  intermediate: number;
+  advanced: number;
+} {
+  const total = aiHero84WeekCurriculum.totalLessons;
+  const basicLessons = 168; // 28 weeks × 6 days
+  const intermediateLessons = 168;
+  const advancedLessons = 168;
   
-  for (const week of accessibleWeeks) {
-    for (const lesson of week.lessons) {
-      if (foundCurrent && !lesson.locked) {
-        return lesson
-      }
-      if (lesson.id === currentLessonId) {
-        foundCurrent = true
-      }
-    }
-  }
+  const completedBasic = completedLessons.filter(id => {
+    const lesson = getLessonById(id);
+    return lesson?.stage === 'BASIC';
+  }).length;
   
-  return null
+  const completedIntermediate = completedLessons.filter(id => {
+    const lesson = getLessonById(id);
+    return lesson?.stage === 'INTERMEDIATE';
+  }).length;
+  
+  const completedAdvanced = completedLessons.filter(id => {
+    const lesson = getLessonById(id);
+    return lesson?.stage === 'ADVANCED';
+  }).length;
+  
+  return {
+    overall: Math.round((completedLessons.length / total) * 100),
+    basic: Math.round((completedBasic / basicLessons) * 100),
+    intermediate: Math.round((completedIntermediate / intermediateLessons) * 100),
+    advanced: Math.round((completedAdvanced / advancedLessons) * 100)
+  };
 }
 
-export function getWeekProgress(weekNumber: number): { completed: number; total: number; percentage: number } {
-  const week = getWeekById(weekNumber)
-  if (!week) return { completed: 0, total: 0, percentage: 0 }
+export function getDropoutRiskForWeek(week: number): string {
+  // High-risk weeks based on difficulty spikes
+  const criticalWeeks = [9, 10, 11, 12, 21, 22, 23, 24, 41, 42, 43, 44, 57, 58, 65, 66];
+  const highRiskWeeks = [5, 6, 13, 14, 29, 30, 37, 38, 45, 46, 53, 54, 61, 62, 69, 70];
   
-  const total = week.lessons.length
-  const completed = 0
-  const percentage = total > 0 ? Math.round((completed / total) * 100) : 0
-  
-  return { completed, total, percentage }
+  if (criticalWeeks.includes(week)) return 'critical';
+  if (highRiskWeeks.includes(week)) return 'high';
+  if (week % 4 === 0) return 'medium'; // Assessment weeks
+  return 'low';
 }
 
+export function getPrerequisitesForWeek(week: number): string[] {
+  const prerequisites: string[] = [];
+  
+  // Math prerequisites
+  if (week === 9) prerequisites.push('Khan Academy Linear Algebra');
+  if (week === 10) prerequisites.push('3Blue1Brown Calculus');
+  if (week === 11) prerequisites.push('Statistics in Plain English');
+  if (week === 41) prerequisites.push('3Blue1Brown Neural Networks');
+  if (week === 57) prerequisites.push('Attention Is All You Need paper');
+  if (week === 65) prerequisites.push('Sutton & Barto RL Book');
+  
+  // Tool prerequisites
+  if (week === 21) prerequisites.push('Anaconda Python installed');
+  if (week === 29) prerequisites.push('Docker Desktop installed');
+  if (week === 41) prerequisites.push('GPU setup (CUDA)');
+  if (week === 53) prerequisites.push('Cloud account (AWS/GCP)');
+  
+  return prerequisites;
+}
+
+export function estimateTimeToComplete(fromWeek: number, toWeek: number): {
+  weeks: number;
+  hours: number;
+  months: number;
+} {
+  const weeks = toWeek - fromWeek + 1;
+  const hours = weeks * 6 * 2.5; // 6 days × 2.5 hours
+  const months = weeks / 4.33; // Average weeks per month
+  
+  return {
+    weeks,
+    hours,
+    months: Math.round(months * 10) / 10
+  };
+}
+
+// Export types
+export type { Lesson, WeekMetadata };
