@@ -407,65 +407,33 @@ function ComparisonTable({
   );
 }
 
-// Success Stories Component
+// Success Stories Component - REPLACED WITH HONEST CONTENT
 function SuccessStories() {
-  const stories = [
-    {
-      name: "Sarah Chen",
-      role: "ML Engineer at Google",
-      tier: "AI Engineer",
-      quote: "AIHero's structured approach helped me transition from web development to AI in just 8 months. Now I'm building recommendation systems at scale.",
-      avatar: "👩‍💻",
-      salary: "+$45k"
-    },
-    {
-      name: "Marcus Johnson",
-      role: "Data Scientist at Netflix",
-      tier: "AI Developer", 
-      quote: "The hands-on projects were exactly what I needed. My portfolio from AIHero directly led to my current role analyzing viewer behavior.",
-      avatar: "👨‍🔬",
-      salary: "+$38k"
-    },
-    {
-      name: "Elena Rodriguez",
-      role: "AI Researcher at OpenAI",
-      tier: "AI Research Pro",
-      quote: "The advanced curriculum covering transformers and research implementation gave me the foundation to contribute to cutting-edge AI research.",
-      avatar: "👩‍🔬",
-      salary: "+$85k"
-    }
-  ];
-
   return (
     <div className="mb-16">
       <div className="text-center mb-8">
-        <h2 className="text-3xl font-bold text-white mb-4">Success Stories</h2>
-        <p className="text-gray-400">Join thousands who've accelerated their AI careers with AIHero</p>
+        <h2 className="text-3xl font-bold text-white mb-4">Why Choose AIHero?</h2>
+        <p className="text-gray-400">Learn AI development through hands-on projects and real-world applications</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {stories.map((story, index) => (
-          <motion.div
-            key={index}
-            className="bg-gray-800 rounded-xl p-6 border border-gray-700"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.1 }}
-          >
-            <div className="flex items-center mb-4">
-              <div className="text-3xl mr-3">{story.avatar}</div>
-              <div>
-                <h4 className="font-semibold text-white">{story.name}</h4>
-                <p className="text-sm text-gray-400">{story.role}</p>
-              </div>
-              <div className="ml-auto bg-green-900/50 text-green-400 px-2 py-1 rounded text-sm font-semibold">
-                {story.salary}
-              </div>
-            </div>
-            <blockquote className="text-gray-300 italic mb-4">"{story.quote}"</blockquote>
-            <div className="text-xs text-gray-500">Completed: {story.tier}</div>
-          </motion.div>
-        ))}
+        <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
+          <div className="text-3xl mb-4 text-center">🚀</div>
+          <h4 className="font-semibold text-white mb-2">Project-Based Learning</h4>
+          <p className="text-gray-300">Build real AI applications and add them to your portfolio</p>
+        </div>
+        
+        <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
+          <div className="text-3xl mb-4 text-center">📚</div>
+          <h4 className="font-semibold text-white mb-2">Comprehensive Curriculum</h4>
+          <p className="text-gray-300">From Python basics to advanced machine learning concepts</p>
+        </div>
+        
+        <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
+          <div className="text-3xl mb-4 text-center">🎯</div>
+          <h4 className="font-semibold text-white mb-2">Industry-Relevant Skills</h4>
+          <p className="text-gray-300">Learn the tools and techniques used by professional AI developers</p>
+        </div>
       </div>
     </div>
   );
