@@ -1,0 +1,162 @@
+{
+  "evaluation_engine": {
+    "version": "1.0.0",
+    "description": "Comprehensive evaluation system for AIhero platform",
+    "question_types": {
+      "multiple_choice": {
+        "structure": {
+          "question": "string",
+          "options": ["string[]"],
+          "correct_answer": "number (index)",
+          "explanation": "string",
+          "points": "number"
+        },
+        "auto_grading": true,
+        "immediate_feedback": true
+      },
+      "code_execution": {
+        "structure": {
+          "question": "string",
+          "starter_code": "string",
+          "test_cases": [
+            {
+              "input": "any",
+              "expected_output": "any", 
+              "description": "string"
+            }
+          ],
+          "language": "python|javascript|typescript",
+          "timeout": "number (seconds)"
+        },
+        "auto_grading": true,
+        "sandbox": "secure_execution_environment"
+      },
+      "project_assessment": {
+        "structure": {
+          "requirements": ["string[]"],
+          "evaluation_criteria": [
+            {
+              "criterion": "string",
+              "weight": "number",
+              "rubric": {
+                "excellent": "string",
+                "good": "string", 
+                "needs_improvement": "string"
+              }
+            }
+          ],
+          "submission_format": "code|url|file_upload"
+        },
+        "auto_grading": false,
+        "review_required": true
+      },
+      "conceptual": {
+        "structure": {
+          "question": "string",
+          "expected_elements": ["string[]"],
+          "rubric": {
+            "excellent": "string",
+            "good": "string",
+            "needs_improvement": "string"
+          },
+          "sample_answer": "string"
+        },
+        "auto_grading": "ai_assisted",
+        "human_review": "optional"
+      }
+    },
+    "scoring_system": {
+      "point_scale": "0-100",
+      "passing_threshold": 80,
+      "mastery_threshold": 95,
+      "partial_credit": {
+        "enabled": true,
+        "minimum_percentage": 10
+      },
+      "bonus_points": {
+        "early_submission": 5,
+        "perfect_score": 10,
+        "code_style_excellence": 5
+      }
+    },
+    "adaptive_features": {
+      "difficulty_adjustment": {
+        "increase_criteria": "3 consecutive perfect scores",
+        "decrease_criteria": "2 consecutive failures",
+        "adjustment_range": "±1 difficulty level"
+      },
+      "personalized_remediation": {
+        "weak_areas_identification": "automatic",
+        "custom_practice_generation": "ai_powered",
+        "prerequisite_review": "automatic"
+      },
+      "learning_path_optimization": {
+        "skip_ahead_criteria": "consistent excellence + time efficiency",
+        "additional_practice": "automatic for struggling concepts",
+        "learning_style_adaptation": "visual|auditory|kinesthetic preference detection"
+      }
+    },
+    "analytics_and_insights": {
+      "individual_progress": {
+        "concept_mastery_map": "visual representation of understood concepts",
+        "learning_velocity": "concepts learned per hour",
+        "retention_analysis": "knowledge decay patterns",
+        "strength_weakness_profile": "detailed skill assessment"
+      },
+      "meta_learning_data": {
+        "optimal_study_patterns": "time of day, session length preferences", 
+        "learning_efficiency_metrics": "concepts per hour, retention rates",
+        "engagement_indicators": "time spent, completion rates, voluntary practice",
+        "challenge_preference": "preferred difficulty progression"
+      },
+      "curriculum_optimization": {
+        "lesson_effectiveness": "completion rates, understanding scores",
+        "concept_difficulty_ranking": "which concepts students find hardest",
+        "prerequisite_validation": "are prerequisites actually sufficient",
+        "pacing_optimization": "optimal time allocation per concept"
+      }
+    },
+    "feedback_system": {
+      "immediate_feedback": {
+        "correct_answers": "positive reinforcement + concept reinforcement",
+        "incorrect_answers": "gentle correction + explanation + hint",
+        "partial_credit": "acknowledgment + guidance for improvement"
+      },
+      "detailed_explanations": {
+        "why_correct": "conceptual explanation of correct reasoning",
+        "common_mistakes": "why incorrect options are wrong",
+        "real_world_connection": "how this applies professionally"
+      },
+      "motivational_elements": {
+        "progress_celebration": "milestone achievements, streaks",
+        "growth_mindset": "focus on improvement over raw scores",
+        "peer_comparison": "anonymous relative performance (optional)"
+      }
+    },
+    "integrity_and_security": {
+      "anti_cheating": {
+        "question_randomization": "different questions for each attempt",
+        "answer_shuffling": "randomize multiple choice order",
+        "time_limits": "prevent extensive external research",
+        "code_plagiarism_detection": "similarity analysis"
+      },
+      "privacy_protection": {
+        "anonymous_analytics": "no personal data in performance metrics",
+        "secure_execution": "sandboxed code execution",
+        "data_retention": "automatic cleanup of temporary data"
+      }
+    },
+    "integration_points": {
+      "lesson_component": {
+        "assessment_loading": "lazy load assessments with lesson content",
+        "progress_tracking": "real-time sync with user progress",
+        "mastery_gating": "prevent advancement until mastery achieved"
+      },
+      "platform_analytics": {
+        "performance_dashboard": "instructor/admin view of student progress",
+        "curriculum_insights": "data-driven curriculum improvement",
+        "learner_support": "automatic identification of students needing help"
+      }
+    }
+  }
+}

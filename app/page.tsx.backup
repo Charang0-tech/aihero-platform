@@ -19,8 +19,8 @@ export default function Dashboard() {
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
         <div style={{ backgroundColor: '#1f2937', padding: '32px', borderRadius: '16px', marginBottom: '32px', textAlign: 'center' }}>
           <h1 style={{ fontSize: '48px', color: '#fcd34d', marginBottom: '16px', fontWeight: 'bold' }}>🧠 AIHero Platform</h1>
-          <p style={{ fontSize: '20px', color: '#9ca3af', marginBottom: '8px' }}>Brutal AI Education System</p>
-          <p style={{ fontSize: '16px', color: '#ef4444', fontWeight: 'bold' }}>⚠️ 210 hours over 14 weeks. No shortcuts. No excuses.</p>
+          <p style={{ fontSize: '20px', color: '#9ca3af', marginBottom: '8px' }}>Comprehensive AI Education Platform</p>
+          <p style={{ fontSize: '16px', color: '#3b82f6', fontWeight: 'bold' }}>📚 210 hours of structured learning over 14 weeks</p>
         </div>
 
         <div style={{ backgroundColor: '#1f2937', padding: '24px', borderRadius: '12px', marginBottom: '32px' }}>
@@ -64,9 +64,9 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div style={{ backgroundColor: '#7f1d1d', padding: '20px', borderRadius: '8px', marginTop: '32px', textAlign: 'center' }}>
-          <p style={{ color: '#fecaca', fontWeight: 'bold' }}>⚠️ BRUTAL STANDARD WARNING ⚠️</p>
-          <p style={{ color: '#fecaca', fontSize: '14px', marginTop: '8px' }}>Miss more than 3 days total = restart from beginning. Pass rate: 30-40%. This system filters for serious learners only.</p>
+        <div style={{ backgroundColor: '#1e40af', padding: '20px', borderRadius: '8px', marginTop: '32px', textAlign: 'center' }}>
+          <p style={{ color: '#dbeafe', fontWeight: 'bold' }}>🎯 LEARNING COMMITMENT</p>
+          <p style={{ color: '#dbeafe', fontSize: '14px', marginTop: '8px' }}>Stay consistent with your learning schedule. This comprehensive curriculum is designed for dedicated learners.</p>
         </div>
       </div>
     </div>

@@ -1,0 +1,72 @@
+{
+  "curriculum_architecture": {
+    "total_weeks": 84,
+    "total_days": 504,
+    "program_duration": "18-20 months",
+    "content_strategy": "Modular, lightweight, progressively loaded",
+    "last_updated": "2025-08-22"
+  },
+  "tier_structure": {
+    "phase_1_foundations": {
+      "weeks": "1-12", 
+      "duration": "3 months",
+      "tier": "free",
+      "focus": "Python fundamentals, basic programming, simple projects",
+      "key_skills": ["Python basics", "Problem solving", "Git", "Basic web concepts"]
+    },
+    "phase_2_web_development": {
+      "weeks": "13-28",
+      "duration": "4 months", 
+      "tier": "intermediate",
+      "price": "$197",
+      "focus": "Full-stack web development, databases, APIs",
+      "key_skills": ["HTML/CSS/JS", "React/Next.js", "Databases", "API development"]
+    },
+    "phase_3_data_and_ml": {
+      "weeks": "29-52",
+      "duration": "6 months",
+      "tier": "advanced", 
+      "price": "$497",
+      "focus": "Data science, statistics, machine learning fundamentals",
+      "key_skills": ["Statistics", "Data analysis", "ML algorithms", "Model training"]
+    },
+    "phase_4_ai_engineering": {
+      "weeks": "53-84",
+      "duration": "8 months",
+      "tier": "professional",
+      "price": "$997", 
+      "focus": "Advanced AI, deep learning, research, specialization",
+      "key_skills": ["Deep learning", "AI research", "Advanced models", "Specialization"]
+    }
+  },
+  "content_loading_strategy": {
+    "approach": "Lazy loading with caching",
+    "file_structure": "One JSON file per week",
+    "bundle_size": "Maximum 50KB per week",
+    "caching": "Browser cache with versioning",
+    "preloading": "Current week + next 2 weeks"
+  },
+  "evaluation_engine": {
+    "types": ["multiple_choice", "code_execution", "project_assessment", "peer_review"],
+    "integration": "Real-time scoring with immediate feedback",
+    "analytics": "Anonymous performance metrics for curriculum optimization",
+    "adaptive": "Difficulty adjustment based on performance"
+  },
+  "content_components": {
+    "learn_tab": {
+      "sections": ["introduction", "core_concepts", "examples", "guided_practice"],
+      "media_types": ["text", "code_examples", "interactive_demos", "visual_diagrams"],
+      "engagement": "Interactive elements, progress tracking, concept mastery"
+    },
+    "practice_tab": {
+      "exercises": ["guided_tutorials", "code_challenges", "mini_projects"],
+      "progression": "Scaffolded difficulty increase",
+      "hints": "Multi-level hint system"
+    },
+    "assessment_tab": {
+      "question_types": ["conceptual", "practical", "application", "synthesis"],
+      "scoring": "Immediate feedback with explanations",
+      "mastery_threshold": "80% for advancement"
+    }
+  }
+}

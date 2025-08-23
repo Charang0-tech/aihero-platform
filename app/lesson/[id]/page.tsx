@@ -1,7 +1,16 @@
 'use client'
 
-import { useState } from 'react'
 import { notFound } from 'next/navigation'
+import { getLessonById } from '@/lib/curriculum/index'
+import { week01Content } from '@/lib/curriculum/weeks/week01'
+import EnhancedLessonPage from '@/components/EnhancedLessonPage'
+import { useGamificationStore } from '@/stores/gamificationStore'
+import { useSubscriptionStore } from '@/stores/subscriptionStore'
+import { useAnalyticsStore } from '@/stores/analyticsStore'
+import { useEffect } from 'react'
+
+// Import fallback components for basic lessons
+import { useState } from 'react'
 import { 
   BookOpen, 
   Code, 
@@ -9,31 +18,165 @@ import {
   MessageSquare, 
   CheckCircle, 
   Clock, 
-  Users,
   ArrowLeft,
   Star,
   Lightbulb,
   Target,
   Trophy,
   Calendar,
-  Lock,
-  Crown
+  Lock
 } from 'lucide-react'
 import Link from 'next/link'
 import PythonLab from '@/components/PythonLab'
+import { SUBSCRIPTION_TIERS } from '@/lib/curriculum/index'
 
-// Import your actual curriculum
-import { getLessonById, getWeekById, SUBSCRIPTION_TIERS, type Lesson } from '@/lib/curriculum'
+// Upgrade Prompt Component
+function UpgradePrompt({ lesson, reason }: { lesson: any; reason?: string }) {
+  const [showPlans, setShowPlans] = useState(false)
+  const subscription = useSubscriptionStore()
+  
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-blue-900 flex items-center justify-center p-4">
+      <div className="max-w-2xl w-full">
+        <div className="bg-gray-800/80 backdrop-blur-sm rounded-2xl p-8 border border-gray-700 text-center">
+          <div className="mb-6">
+            <div className="w-20 h-20 bg-gradient-to-r from-yellow-500 to-orange-600 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Lock className="w-10 h-10 text-white" />
+            </div>
+            <h1 className="text-3xl font-bold text-white mb-2">Premium Content</h1>
+            <p className="text-gray-400 mb-4">{reason || 'This lesson requires a premium subscription.'}</p>
+          </div>
+          
+          <div className="bg-gray-900/50 rounded-xl p-6 mb-6">
+            <div className="flex items-center justify-between mb-4">
+              <div className="text-left">
+                <h3 className="text-xl font-bold text-white">{lesson.title}</h3>
+                <p className="text-gray-400">{lesson.target}</p>
+              </div>
+              <div className="text-right">
+                <div className="text-sm text-gray-400">Week {lesson.week}</div>
+                <div className="text-sm text-gray-400">{lesson.duration} min</div>
+              </div>
+            </div>
+            
+            <div className="flex items-center space-x-4 text-sm text-gray-300">
+              <div className="flex items-center space-x-1">
+                <Target className="w-4 h-4" />
+                <span>Difficulty {lesson.difficulty}/5</span>
+              </div>
+              {lesson.isPortfolioWorthy && (
+                <div className="flex items-center space-x-1">
+                  <Trophy className="w-4 h-4 text-yellow-400" />
+                  <span>Portfolio Project</span>
+                </div>
+              )}
+            </div>
+          </div>
+          
+          <div className="space-y-4">
+            <button
+              onClick={() => setShowPlans(true)}
+              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 px-6 rounded-xl font-semibold text-lg hover:shadow-lg transition-all"
+            >
+              Unlock This Content
+            </button>
+            
+            <Link
+              href="/dashboard"
+              className="block w-full bg-gray-700 text-gray-300 py-3 px-6 rounded-xl font-medium hover:bg-gray-600 transition-colors"
+            >
+              Back to Dashboard
+            </Link>
+          </div>
+        </div>
+        
+        {showPlans && (
+          <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-4">
+            <div className="bg-gray-900 rounded-2xl max-w-6xl w-full max-h-[90vh] overflow-y-auto">
+              <div className="p-4 border-b border-gray-700 flex items-center justify-between">
+                <h2 className="text-2xl font-bold text-white">Choose Your Plan</h2>
+                <button
+                  onClick={() => setShowPlans(false)}
+                  className="text-gray-400 hover:text-white p-2"
+                >
+                  ✕
+                </button>
+              </div>
+              <div className="p-6">
+                {/* This would render the subscription plans component */}
+                <div className="text-center py-12">
+                  <h3 className="text-xl font-bold text-white mb-4">Subscription Plans Coming Soon!</h3>
+                  <p className="text-gray-400">We're working on the perfect pricing for you.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
 
 export default function LessonPage({ params }: { params: { id: string } }) {
-  const [activeTab, setActiveTab] = useState('learn')
   const lesson = getLessonById(params.id)
-
+  
+  // Store hooks
+  const gamification = useGamificationStore()
+  const subscription = useSubscriptionStore()
+  const analytics = useAnalyticsStore()
+  
+  // Track lesson start
+  useEffect(() => {
+    if (lesson) {
+      analytics.trackLessonStart(lesson.id, lesson.difficulty)
+    }
+  }, [lesson?.id])
+  
+  // Check access
+  const accessCheck = subscription.canAccessLesson(params.id)
+  
   if (!lesson) {
     notFound()
   }
+  
+  if (!accessCheck.allowed) {
+    return <UpgradePrompt lesson={lesson} reason={accessCheck.reason} />
+  }
 
-  const week = getWeekById(lesson.week)
+  // Check if we have enhanced content for this lesson
+  const enhancedContent = week01Content[params.id as keyof typeof week01Content]
+  
+  if (enhancedContent) {
+    // Use the enhanced lesson component for rich, interactive content
+    return (
+      <EnhancedLessonPage 
+        lesson={lesson} 
+        content={enhancedContent}
+        onLessonComplete={(timeSpent) => {
+          gamification.completeLesson(lesson.id, timeSpent)
+          analytics.trackLessonComplete(lesson.id, timeSpent, undefined)
+        }}
+        onAssessmentSubmit={(score) => {
+          gamification.submitAssessment(lesson.id, score)
+          analytics.trackAssessment(lesson.id, score, 1, 0)
+        }}
+        onDiscussionPost={(response) => {
+          gamification.addDiscussionPost(lesson.id, response)
+        }}
+        onCodeExecution={(success, error) => {
+          analytics.trackCodeExecution(lesson.id, success, error)
+        }}
+      />
+    )
+  }
+  
+  // Fall back to basic lesson display for lessons without enhanced content
+  return <BasicLessonPage lesson={lesson} />
+}
+
+// Basic lesson component for lessons that don't have enhanced content yet
+function BasicLessonPage({ lesson }: { lesson: any }) {
+  const [activeTab, setActiveTab] = useState('learn')
   
   const tabs = [
     { id: 'learn', label: 'Learn', icon: BookOpen },
@@ -55,16 +198,6 @@ export default function LessonPage({ params }: { params: { id: string } }) {
 
   const tierInfo = getTierInfo(lesson.tier)
   const subscriptionInfo = SUBSCRIPTION_TIERS[lesson.tier as keyof typeof SUBSCRIPTION_TIERS]
-
-  // Difficulty stars
-  const getDifficultyStars = (difficulty: number) => {
-    return Array.from({ length: 5 }, (_, i) => (
-      <Star 
-        key={i} 
-        className={`w-4 h-4 ${i < difficulty ? 'text-yellow-400 fill-current' : 'text-gray-400'}`} 
-      />
-    ))
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-blue-900">
@@ -90,11 +223,6 @@ export default function LessonPage({ params }: { params: { id: string } }) {
                 <Clock className="w-4 h-4" />
                 <span>{lesson.duration} minutes</span>
               </div>
-              <div className={`px-3 py-1 rounded-full text-sm font-medium bg-${tierInfo.color}-900/30 text-${tierInfo.color}-300 border border-${tierInfo.color}-800/50 flex items-center space-x-1`}>
-                <span>{tierInfo.icon}</span>
-                <span>{tierInfo.name}</span>
-                {lesson.locked && <Lock className="w-3 h-3 ml-1" />}
-              </div>
             </div>
           </div>
         </div>
@@ -104,113 +232,26 @@ export default function LessonPage({ params }: { params: { id: string } }) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Lesson Header */}
         <div className="mb-8">
-          <div className="flex items-start justify-between mb-4">
-            <div className="flex-1">
-              <h1 className="text-4xl font-bold text-white mb-2">{lesson.title}</h1>
-              {week && (
-                <p className="text-lg text-gray-400 mb-4">{week.title}: {week.focus}</p>
-              )}
-            </div>
-            {lesson.isPortfolioWorthy && (
-              <div className="bg-yellow-900/30 rounded-lg px-4 py-2 border border-yellow-800/50">
-                <div className="flex items-center space-x-2 text-yellow-300">
-                  <Trophy className="w-5 h-5" />
-                  <span className="font-medium">Portfolio Project</span>
-                </div>
-              </div>
-            )}
-          </div>
-          
-          {/* Lesson Stats */}
-          <div className="grid md:grid-cols-3 gap-6 mb-6">
-            {/* Target */}
-            <div className="bg-blue-900/30 rounded-lg p-6 border border-blue-800/50">
-              <h2 className="text-lg font-semibold text-blue-300 mb-3 flex items-center">
-                <Target className="w-5 h-5 mr-2" />
-                Learning Target
-              </h2>
-              <p className="text-gray-300">{lesson.target}</p>
-            </div>
+          <h1 className="text-4xl font-bold text-white mb-2">{lesson.title}</h1>
+          <p className="text-lg text-gray-400 mb-6">{lesson.target}</p>
 
-            {/* Deliverable */}
-            <div className="bg-green-900/30 rounded-lg p-6 border border-green-800/50">
-              <h2 className="text-lg font-semibold text-green-300 mb-3 flex items-center">
-                <Trophy className="w-5 h-5 mr-2" />
-                Deliverable
-              </h2>
-              <p className="text-gray-300">{lesson.deliverable}</p>
+          {/* Enhanced Content Notice */}
+          <div className="bg-blue-900/20 rounded-lg p-6 border border-blue-800/50 mb-6">
+            <div className="flex items-center space-x-3 mb-3">
+              <Star className="w-6 h-6 text-blue-400" />
+              <h3 className="text-lg font-semibold text-blue-300">Enhanced Content Coming Soon!</h3>
             </div>
-
-            {/* Difficulty & Concepts */}
-            <div className="bg-purple-900/30 rounded-lg p-6 border border-purple-800/50">
-              <h2 className="text-lg font-semibold text-purple-300 mb-3 flex items-center">
-                <Star className="w-5 h-5 mr-2" />
-                Difficulty & Focus
-              </h2>
-              <div className="flex items-center space-x-2 mb-3">
-                <span className="text-gray-300 text-sm">Difficulty:</span>
-                <div className="flex space-x-1">
-                  {getDifficultyStars(lesson.difficulty)}
-                </div>
-              </div>
-              <div className="flex flex-wrap gap-1">
-                {lesson.concepts.slice(0, 3).map((concept, index) => (
-                  <span key={index} className="text-xs bg-purple-800/50 text-purple-200 px-2 py-1 rounded">
-                    {concept}
-                  </span>
-                ))}
-                {lesson.concepts.length > 3 && (
-                  <span className="text-xs text-purple-300">+{lesson.concepts.length - 3} more</span>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* Pass Criteria (if available) */}
-          {lesson.passCriteria && (
-            <div className="bg-green-900/20 rounded-lg p-6 border border-green-800/50 mb-6">
-              <h2 className="text-lg font-semibold text-green-300 mb-3 flex items-center">
-                <CheckCircle className="w-5 h-5 mr-2" />
-                Success Criteria
-              </h2>
-              <p className="text-gray-300">{lesson.passCriteria}</p>
-            </div>
-          )}
-
-          {/* All Concepts */}
-          <div className="bg-gray-800/50 rounded-lg p-6 border border-gray-700">
-            <h2 className="text-lg font-semibold text-white mb-3">Key Concepts You'll Learn</h2>
-            <div className="flex flex-wrap gap-2">
-              {lesson.concepts.map((concept, index) => (
-                <span key={index} className="bg-blue-800/50 text-blue-200 px-3 py-1 rounded-full text-sm">
-                  {concept}
-                </span>
-              ))}
+            <p className="text-gray-300 mb-4">
+              This lesson will soon feature comprehensive content with interactive exercises, 
+              assessments, and hands-on coding projects. For now, enjoy the basic lesson structure.
+            </p>
+            <div className="text-sm text-gray-400">
+              <p><strong>Goal:</strong> {lesson.target}</p>
+              <p><strong>Build:</strong> {lesson.deliverable}</p>
+              <p><strong>Key Concepts:</strong> {lesson.concepts.join(', ')}</p>
             </div>
           </div>
         </div>
-
-        {/* Access Control for Locked Lessons */}
-        {lesson.locked && (
-          <div className="bg-red-900/30 rounded-lg p-8 border border-red-800/50 mb-8 text-center">
-            <Lock className="w-16 h-16 text-red-400 mx-auto mb-4" />
-            <h2 className="text-2xl font-semibold text-red-300 mb-4">This Lesson is Locked</h2>
-            <p className="text-gray-300 mb-6">
-              Upgrade to <strong>{tierInfo.name}</strong> to access this lesson and continue your AI journey.
-            </p>
-            <div className="flex items-center justify-center space-x-4">
-              <div className={`bg-${tierInfo.color}-900/30 rounded-lg p-4 border border-${tierInfo.color}-800/50`}>
-                <p className={`text-${tierInfo.color}-300 font-semibold`}>
-                  ${subscriptionInfo.price} {subscriptionInfo.duration}
-                </p>
-                <p className="text-gray-400 text-sm">{subscriptionInfo.features.length} features included</p>
-              </div>
-              <button className={`px-6 py-3 bg-${tierInfo.color}-600 hover:bg-${tierInfo.color}-700 text-white rounded-lg font-medium transition-colors`}>
-                Upgrade Now
-              </button>
-            </div>
-          </div>
-        )}
 
         {/* Tab Navigation */}
         <div className="mb-8">
@@ -227,11 +268,9 @@ export default function LessonPage({ params }: { params: { id: string } }) {
                         ? 'border-blue-500 text-blue-400'
                         : 'border-transparent text-gray-400 hover:text-gray-300 hover:border-gray-300'
                     }`}
-                    disabled={lesson.locked && tab.id === 'lab'}
                   >
                     <Icon className="w-5 h-5" />
                     <span>{tab.label}</span>
-                    {lesson.locked && tab.id === 'lab' && <Lock className="w-3 h-3" />}
                   </button>
                 )
               })}
@@ -241,258 +280,98 @@ export default function LessonPage({ params }: { params: { id: string } }) {
 
         {/* Tab Content */}
         <div className="bg-gray-800/50 rounded-xl border border-gray-700">
-          
           {/* Learn Tab */}
           {activeTab === 'learn' && (
             <div className="p-8">
               <div className="max-w-4xl">
-                {/* Introduction */}
-                <section className="mb-8">
-                  <h2 className="text-2xl font-semibold text-white mb-4">Welcome to {lesson.title}</h2>
-                  <div className="bg-blue-900/20 rounded-lg p-6 border border-blue-800/50 mb-6">
-                    <p className="text-blue-200 text-lg mb-4">
-                      <strong>Today's Goal:</strong> {lesson.target}
-                    </p>
-                    <p className="text-gray-300">
-                      By the end of this lesson, you'll have built: <strong>{lesson.deliverable}</strong>
-                    </p>
-                  </div>
-                </section>
-
-                {/* Lesson Overview */}
-                <section className="mb-8">
-                  <h2 className="text-2xl font-semibold text-white mb-4">What You'll Learn</h2>
-                  <div className="grid md:grid-cols-2 gap-4">
-                    {lesson.concepts.map((concept, index) => (
-                      <div key={index} className="flex items-start space-x-3 p-4 bg-gray-900/50 rounded-lg border border-gray-600">
-                        <div className="w-2 h-2 bg-blue-400 rounded-full mt-2 flex-shrink-0"></div>
-                        <span className="text-gray-300">{concept}</span>
-                      </div>
-                    ))}
-                  </div>
-                </section>
-
-                {/* Time Management */}
-                <section className="mb-8">
-                  <h2 className="text-2xl font-semibold text-white mb-4">Time Breakdown</h2>
-                  <div className="bg-yellow-900/20 rounded-lg p-6 border border-yellow-800/50">
-                    <div className="flex items-center space-x-4 text-yellow-200">
-                      <Clock className="w-5 h-5" />
-                      <span className="font-medium">Estimated Time: {lesson.duration} minutes</span>
-                    </div>
-                    <div className="mt-4 grid grid-cols-3 gap-4 text-sm">
-                      <div className="text-center">
-                        <p className="text-gray-400">Learning</p>
-                        <p className="text-white font-medium">{Math.round(lesson.duration * 0.4)} min</p>
-                      </div>
-                      <div className="text-center">
-                        <p className="text-gray-400">Practice</p>
-                        <p className="text-white font-medium">{Math.round(lesson.duration * 0.4)} min</p>
-                      </div>
-                      <div className="text-center">
-                        <p className="text-gray-400">Building</p>
-                        <p className="text-white font-medium">{Math.round(lesson.duration * 0.2)} min</p>
-                      </div>
-                    </div>
-                  </div>
-                </section>
-
-                {/* Replit Integration */}
-                {lesson.replitProject && (
-                  <section className="mb-8">
-                    <h2 className="text-2xl font-semibold text-white mb-4">Practice Environment</h2>
-                    <div className="bg-green-900/20 rounded-lg p-6 border border-green-800/50">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <h3 className="text-green-300 font-medium mb-2">Python Lab - {lesson.replitProject}</h3>
-                          <p className="text-gray-300 text-sm">
-                            Practice Python concepts directly in your browser with real code execution
-                          </p>
-                        </div>
-                        <button onClick={() => setActiveTab("lab")} className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors">
-                          Open Python Lab
-                        </button>
-                      </div>
-                    </div>
-                  </section>
-                )}
-
-                {/* Portfolio Worth Notice */}
-                {lesson.isPortfolioWorthy && (
-                  <section>
-                    <div className="bg-yellow-900/20 rounded-lg p-6 border border-yellow-800/50">
-                      <div className="flex items-center space-x-3 mb-3">
-                        <Trophy className="w-6 h-6 text-yellow-400" />
-                        <h3 className="text-lg font-semibold text-yellow-300">Portfolio Project</h3>
-                      </div>
-                      <p className="text-gray-300">
-                        This lesson's deliverable is portfolio-worthy! Make sure to polish your work and add it to your GitHub portfolio when complete.
-                      </p>
-                    </div>
-                  </section>
-                )}
-              </div>
-            </div>
-          )}
-
-          {/* Practice Tab */}
-          {activeTab === 'practice' && (
-            <div className="p-8">
-              <div className="max-w-4xl">
-                <h2 className="text-2xl font-semibold text-white mb-6">Practice Exercises</h2>
-                
-                {/* Deliverable Focus */}
-                <div className="bg-blue-900/30 rounded-lg p-6 border border-blue-800/50 mb-6">
-                  <h3 className="text-lg font-semibold text-blue-300 mb-3">Today's Deliverable</h3>
-                  <p className="text-gray-300 mb-4">{lesson.deliverable}</p>
-                  <div className="text-sm text-gray-400">
-                    <p><strong>Time limit:</strong> {lesson.duration} minutes</p>
-                    <p><strong>Difficulty:</strong> {lesson.difficulty}/5 stars</p>
-                    <p><strong>Key concepts:</strong> {lesson.concepts.slice(0, 3).join(', ')}</p>
-                  </div>
+                <h2 className="text-2xl font-semibold text-white mb-4">Learning Objectives</h2>
+                <div className="bg-blue-900/20 rounded-lg p-6 border border-blue-800/50 mb-6">
+                  <p className="text-blue-200 text-lg mb-4">
+                    <strong>Today's Goal:</strong> {lesson.target}
+                  </p>
+                  <p className="text-gray-300">
+                    By the end of this lesson, you'll have built: <strong>{lesson.deliverable}</strong>
+                  </p>
                 </div>
-
-                {/* Replit Integration */}
-                {lesson.replitProject && (
-                  <div className="bg-green-900/20 rounded-lg p-6 border border-green-800/50 mb-6">
-                    <h3 className="text-lg font-semibold text-green-300 mb-3">Guided Practice</h3>
-                    <p className="text-gray-300 mb-4">
-                      Work through structured exercises in the Python Lab for this lesson.
-                    </p>
-                    <button className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors flex items-center space-x-2">
-                      <Play className="w-4 h-4" />
-                      <span>Start Coding in Python Lab</span>
-                    </button>
-                  </div>
-                )}
-
-                {/* Practice Steps */}
-                <div className="space-y-4">
-                  <h3 className="text-xl font-semibold text-white">Practice Roadmap</h3>
-                  
-                  {lesson.concepts.map((concept, index) => (
-                    <div key={index} className="bg-gray-900/50 rounded-lg p-4 border border-gray-600">
-                      <h4 className="text-white font-medium mb-2">Step {index + 1}: Master {concept}</h4>
-                      <p className="text-gray-300 text-sm mb-3">
-                        Focus on understanding and implementing {concept.toLowerCase()} concepts.
-                      </p>
-                      <div className="flex items-center space-x-2 text-xs text-gray-400">
-                        <Clock className="w-3 h-3" />
-                        <span>~{Math.round(lesson.duration / lesson.concepts.length)} minutes</span>
-                      </div>
+                
+                <h3 className="text-xl font-semibold text-white mb-4">Key Concepts</h3>
+                <div className="grid md:grid-cols-2 gap-4 mb-6">
+                  {lesson.concepts.map((concept: string, index: number) => (
+                    <div key={index} className="flex items-start space-x-3 p-4 bg-gray-900/50 rounded-lg border border-gray-600">
+                      <div className="w-2 h-2 bg-blue-400 rounded-full mt-2 flex-shrink-0"></div>
+                      <span className="text-gray-300">{concept}</span>
                     </div>
                   ))}
                 </div>
+
+                <div className="bg-yellow-900/20 rounded-lg p-6 border border-yellow-800/50">
+                  <h4 className="text-yellow-300 font-semibold mb-2">📚 Enhanced Content Preview</h4>
+                  <p className="text-gray-300 text-sm">
+                    When enhanced content is added for this lesson, you'll see:
+                  </p>
+                  <ul className="text-gray-400 text-sm mt-2 space-y-1">
+                    <li>• 4+ comprehensive learning sections with code examples</li>
+                    <li>• Interactive practice exercises with hints and solutions</li>
+                    <li>• Portfolio-worthy mini projects</li>
+                    <li>• Hands-on lab tasks with working code</li>
+                    <li>• Knowledge assessments with explanations</li>
+                  </ul>
+                </div>
               </div>
             </div>
           )}
 
-          {/* Python Lab Tab */}
+          {/* Other tabs with placeholders */}
+          {activeTab === 'practice' && (
+            <div className="p-8">
+              <div className="text-center py-12">
+                <Lightbulb className="w-16 h-16 text-gray-500 mx-auto mb-4" />
+                <h3 className="text-xl font-semibold text-white mb-2">Practice Exercises Coming Soon</h3>
+                <p className="text-gray-400">Interactive coding exercises will be available here.</p>
+              </div>
+            </div>
+          )}
+
           {activeTab === 'lab' && (
             <div className="p-8">
-              {lesson.locked ? (
-                <div className="text-center py-12">
-                  <Lock className="w-16 h-16 text-gray-500 mx-auto mb-4" />
-                  <p className="text-gray-400">Upgrade to access the Python Lab</p>
-                </div>
-              ) : (
-                <PythonLab 
-                  lessonId={lesson.id}
-                  initialCode={`# ${lesson.title} - Week ${lesson.week}, ${lesson.day}
+              <PythonLab 
+                lessonId={lesson.id}
+                initialCode={`# ${lesson.title} - Week ${lesson.week}, ${lesson.day}
 # 🎯 TARGET: ${lesson.target}
-# ⏰ TIME LIMIT: ${lesson.duration} minutes
 # 🏆 DELIVERABLE: ${lesson.deliverable}
 
 print("Welcome to ${lesson.title}!")
 print("Let's build: ${lesson.deliverable}")
 
 # Key concepts for this lesson:
-${lesson.concepts.map(concept => `# • ${concept}`).join('\n')}
+${lesson.concepts.map((concept: string) => `# • ${concept}`).join('\n')}
 
 # Start building your deliverable here:
 
 `}
-                />
-              )}
+              />
             </div>
           )}
 
-          {/* Assessment Tab */}
           {activeTab === 'assessment' && (
             <div className="p-8">
-              <div className="max-w-4xl">
-                <h2 className="text-2xl font-semibold text-white mb-6">Assessment</h2>
-                
-                {/* Completion Checklist */}
-                <div className="bg-green-900/30 rounded-lg p-6 border border-green-800/50 mb-6">
-                  <h3 className="text-lg font-semibold text-green-300 mb-4 flex items-center">
-                    <CheckCircle className="w-5 h-5 mr-2" />
-                    Completion Checklist
-                  </h3>
-                  <div className="space-y-3">
-                    {lesson.concepts.map((concept, index) => (
-                      <label key={index} className="flex items-center space-x-3 text-gray-300 cursor-pointer">
-                        <input type="checkbox" className="rounded border-gray-600 bg-gray-700" />
-                        <span>I can demonstrate {concept.toLowerCase()}</span>
-                      </label>
-                    ))}
-                    <label className="flex items-center space-x-3 text-gray-300 cursor-pointer">
-                      <input type="checkbox" className="rounded border-gray-600 bg-gray-700" />
-                      <span>I completed the deliverable: {lesson.deliverable}</span>
-                    </label>
-                    {lesson.isPortfolioWorthy && (
-                      <label className="flex items-center space-x-3 text-yellow-300 cursor-pointer">
-                        <input type="checkbox" className="rounded border-gray-600 bg-gray-700" />
-                        <span>I added this project to my portfolio</span>
-                      </label>
-                    )}
-                  </div>
-                </div>
-
-                {/* Self-Assessment */}
-                <div className="bg-blue-900/30 rounded-lg p-6 border border-blue-800/50">
-                  <h3 className="text-lg font-semibold text-blue-300 mb-4">Self-Assessment</h3>
-                  <p className="text-gray-300 mb-4">
-                    Rate your confidence with today's concepts (1 = Need more practice, 5 = Confident):
-                  </p>
-                  <div className="space-y-3">
-                    {lesson.concepts.map((concept, index) => (
-                      <div key={index} className="flex items-center justify-between">
-                        <span className="text-gray-300">{concept}</span>
-                        <div className="flex space-x-1">
-                          {[1, 2, 3, 4, 5].map((rating) => (
-                            <button
-                              key={rating}
-                              className="w-8 h-8 rounded border border-gray-600 hover:bg-blue-600 transition-colors text-sm"
-                            >
-                              {rating}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+              <div className="text-center py-12">
+                <CheckCircle className="w-16 h-16 text-gray-500 mx-auto mb-4" />
+                <h3 className="text-xl font-semibold text-white mb-2">Interactive Assessment Coming Soon</h3>
+                <p className="text-gray-400">Knowledge checks and quizzes will be available here.</p>
               </div>
             </div>
           )}
 
-          {/* Discussion Tab */}
           {activeTab === 'discussion' && (
-            <div className="p-6">
-              <div className="max-w-4xl">
-                <h2 className="text-2xl font-semibold text-white mb-6">Discussion & Help</h2>
-                <div className="text-center py-12">
-                  <MessageSquare className="w-16 h-16 text-gray-500 mx-auto mb-4" />
-                  <p className="text-gray-400">Discussion forum coming soon!</p>
-                  <p className="text-sm text-gray-500 mt-2">
-                    For now, complete your {lesson.deliverable} and move to the next lesson
-                  </p>
-                </div>
+            <div className="p-8">
+              <div className="text-center py-12">
+                <MessageSquare className="w-16 h-16 text-gray-500 mx-auto mb-4" />
+                <h3 className="text-xl font-semibold text-white mb-2">Discussion Forum Coming Soon</h3>
+                <p className="text-gray-400">Community discussions will be available here.</p>
               </div>
             </div>
           )}
-
         </div>
       </div>
     </div>

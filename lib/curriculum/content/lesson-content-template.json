@@ -1,0 +1,178 @@
+{
+  "lesson_content_template": {
+    "metadata": {
+      "id": "w{week}-{day}",
+      "week": 0,
+      "day": "monday",
+      "title": "Lesson Title",
+      "duration": 120,
+      "difficulty": 3,
+      "tier": "free",
+      "concepts": ["concept1", "concept2"],
+      "prerequisites": ["previous_lesson_id"],
+      "learning_objectives": ["objective1", "objective2"],
+      "deliverable": "What student will build",
+      "version": "1.0.0",
+      "last_updated": "2025-08-22"
+    },
+    "learn_tab": {
+      "introduction": {
+        "hook": "Engaging opening that connects to real-world applications",
+        "overview": "What will be learned and why it matters",
+        "time_estimate": "Expected learning time"
+      },
+      "core_concepts": [
+        {
+          "concept_id": "concept_1",
+          "title": "Concept Title",
+          "explanation": "Clear, beginner-friendly explanation",
+          "code_example": {
+            "language": "python",
+            "code": "# Working example code\nprint('Hello, World!')",
+            "explanation": "What this code does and why"
+          },
+          "visual_aid": {
+            "type": "diagram|flowchart|image",
+            "description": "Description of visual concept",
+            "alt_text": "Accessibility description"
+          },
+          "real_world_application": "How this concept is used professionally"
+        }
+      ],
+      "guided_practice": {
+        "title": "Let's Practice Together",
+        "steps": [
+          {
+            "step_number": 1,
+            "instruction": "What to do",
+            "code_template": "# Code template for student to follow\n",
+            "expected_output": "What should happen",
+            "common_mistakes": ["mistake1", "mistake2"],
+            "hints": ["hint1", "hint2"]
+          }
+        ]
+      },
+      "summary": {
+        "key_takeaways": ["takeaway1", "takeaway2"],
+        "next_steps": "What comes next in learning journey"
+      }
+    },
+    "practice_tab": {
+      "exercises": [
+        {
+          "exercise_id": "ex_1",
+          "title": "Exercise Title",
+          "difficulty": 2,
+          "estimated_time": 15,
+          "description": "What the student needs to accomplish",
+          "starter_code": "# Starting point code\n",
+          "solution": "# Complete solution\n",
+          "test_cases": [
+            {
+              "input": "test input",
+              "expected_output": "expected result",
+              "description": "What this test checks"
+            }
+          ],
+          "hints": [
+            {
+              "level": 1,
+              "hint": "Gentle nudge in right direction"
+            },
+            {
+              "level": 2, 
+              "hint": "More specific guidance"
+            },
+            {
+              "level": 3,
+              "hint": "Near-complete solution approach"
+            }
+          ],
+          "learning_notes": "What concept this exercise reinforces"
+        }
+      ],
+      "mini_project": {
+        "title": "Mini Project Name",
+        "description": "Comprehensive project description",
+        "requirements": ["requirement1", "requirement2"],
+        "starter_template": "# Project starting template\n",
+        "evaluation_criteria": ["criteria1", "criteria2"],
+        "portfolio_worthy": true,
+        "estimated_time": 60
+      }
+    },
+    "assessment_tab": {
+      "knowledge_check": [
+        {
+          "question_id": "q_1",
+          "type": "multiple_choice",
+          "question": "Question text",
+          "options": ["option1", "option2", "option3", "option4"],
+          "correct_answer": 0,
+          "explanation": "Why this answer is correct and others are wrong",
+          "concept_tested": "Which learning objective this tests",
+          "difficulty": 2
+        },
+        {
+          "question_id": "q_2", 
+          "type": "code_execution",
+          "question": "Write code to accomplish X",
+          "starter_code": "# Starting template\n",
+          "test_cases": [
+            {
+              "input": "test_input",
+              "expected_output": "expected_result"
+            }
+          ],
+          "evaluation_criteria": ["correctness", "efficiency", "style"],
+          "partial_credit": true
+        },
+        {
+          "question_id": "q_3",
+          "type": "conceptual",
+          "question": "Explain concept X and give an example",
+          "rubric": {
+            "excellent": "Complete understanding with clear example",
+            "good": "Good understanding with minor gaps", 
+            "needs_improvement": "Partial understanding, needs review"
+          },
+          "sample_answer": "Example of excellent response"
+        }
+      ],
+      "mastery_requirements": {
+        "minimum_score": 80,
+        "required_questions_correct": ["q_1", "q_2"],
+        "retry_policy": "Unlimited attempts with 24-hour cooldown",
+        "remediation": "Specific concepts to review if failed"
+      }
+    },
+    "lab_tab": {
+      "title": "Hands-on Lab: {title}",
+      "objective": "What students will accomplish in the lab",
+      "setup_instructions": ["setup step 1", "setup step 2"],
+      "tasks": [
+        {
+          "task_id": "task_1",
+          "title": "Task Title",
+          "description": "What to accomplish",
+          "starter_code": "# Code template\n",
+          "completion_criteria": "How to know task is complete",
+          "verification": "How to verify solution works"
+        }
+      ],
+      "stretch_goals": ["Advanced challenge 1", "Advanced challenge 2"],
+      "cleanup": "How to clean up after lab"
+    },
+    "meta_learning_data": {
+      "engagement_points": ["introduction", "first_code_example", "guided_practice"],
+      "common_struggles": ["concept students typically find difficult"],
+      "success_indicators": ["signs student has mastered content"],
+      "improvement_suggestions": ["how lesson could be enhanced"],
+      "time_tracking": {
+        "average_completion_time": 0,
+        "struggling_student_time": 0,
+        "advanced_student_time": 0
+      }
+    }
+  }
+}

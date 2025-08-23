@@ -1,0 +1,120 @@
+'use client'
+
+import { useState } from 'react'
+import { 
+  BookOpen, 
+  Code, 
+  Play, 
+  MessageSquare, 
+  CheckCircle, 
+  Clock, 
+  ArrowLeft,
+  Star,
+  Lightbulb,
+  Target,
+  Trophy,
+  Calendar,
+  Lock,
+  Eye,
+  EyeOff,
+  ChevronDown,
+  ChevronRight
+} from 'lucide-react'
+import Link from 'next/link'
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'
+import PythonLab from '@/components/PythonLab'
+import { type Lesson } from '@/lib/curriculum'
+
+// Enhanced lesson content structure
+interface LessonSection {
+  title: string
+  content: string
+  codeExample?: {
+    code: string
+    language: string
+    explanation: string
+  }
+}
+
+interface LessonContent {
+  learn: {
+    objective: string
+    sections: LessonSection[]
+  }
+  practice: {
+    exercises: Array<{
+      title: string
+      description: string
+      template: string
+      hints: string[]
+      solution: string
+    }>
+    miniProject: {
+      title: string
+      requirements: string[]
+      starterCode: string
+    }
+  }
+  lab: {
+    tasks: Array<{
+      title: string
+      description: string
+      code: string
+    }>
+  }
+  assessment: {
+    questions: Array<{
+      question: string
+      type: 'multiple-choice' | 'code-completion'
+      options?: string[]
+      correctAnswer: number | string
+      explanation: string
+    }>
+  }
+  discussion: {
+    prompt: string
+    questions: string[]
+  }
+}
+
+interface EnhancedLessonPageProps {
+  lesson: Lesson
+  content?: LessonContent
+}
+
+export default function EnhancedLessonPage({ lesson, content }: EnhancedLessonPageProps) {
+  const [activeTab, setActiveTab] = useState('learn')
+  const [showSolutions, setShowSolutions] = useState<{ [key: number]: boolean }>({})
+  const [showHints, setShowHints] = useState<{ [key: number]: boolean }>({})
+  const [selectedAnswers, setSelectedAnswers] = useState<{ [key: number]: number }>({})
+  const [showAssessmentResults, setShowAssessmentResults] = useState(false)
+
+  const tabs = [
+    { id: 'learn', label: 'Learn', icon: BookOpen },
+    { id: 'practice', label: 'Practice', icon: Lightbulb },
+    { id: 'lab', label: 'Python Lab', icon: Code },
+    { id: 'assessment', label: 'Assessment', icon: CheckCircle },
+    { id: 'discussion', label: 'Discussion', icon: MessageSquare },
+  ]
+
+  // Generate default content if none provided
+  const defaultContent: LessonContent = {
+    learn: {
+      objective: lesson.target,
+      sections: [
+        {
+          title: "Introduction",
+          content: `Welcome to ${lesson.title}. In this lesson, you'll learn ${lesson.concepts.join(', ')}.`,
+          codeExample: {
+            code: `# ${lesson.title} - Getting Started\nprint("Welcome to ${lesson.title}!")`,
+            language: 'python',
+            explanation: 'This is a simple introduction to today\'s lesson.'
+          }
+        }
+      ]
+    },
+    practice: {
+      exercises: [
+        {
+          title: "

@@ -24,7 +24,7 @@ export default function HomePage() {
             </h1>
             <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto">
               Master AI development from Python fundamentals to deploying machine learning models. 
-              Build real projects, earn achievements, and land your dream AI job.
+              Build real projects, earn achievements, and develop industry-relevant skills.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">

@@ -1,0 +1,348 @@
+{
+  "metadata": {
+    "id": "w1-monday", 
+    "week": 1,
+    "day": "monday",
+    "title": "Python Setup & Your First AI Development Environment",
+    "duration": 120,
+    "difficulty": 2,
+    "tier": "free",
+    "concepts": ["Python installation", "IDE setup", "virtual environments", "first program", "AI development workflow"],
+    "prerequisites": [],
+    "learning_objectives": [
+      "Install Python and development tools correctly",
+      "Understand the AI development workflow", 
+      "Create and manage virtual environments",
+      "Write and execute your first Python program",
+      "Set up professional development practices"
+    ],
+    "deliverable": "Complete Python development environment with first AI-focused script",
+    "version": "1.0.0",
+    "last_updated": "2025-08-22"
+  },
+  "learn_tab": {
+    "introduction": {
+      "hook": "Every AI breakthrough started with someone setting up their first Python environment. Today, you're taking the same first step that led to ChatGPT, autonomous cars, and breakthrough medical AI. This isn't just about installing software - you're building the foundation of your AI research career.",
+      "overview": "In this lesson, you'll set up a professional Python development environment optimized for AI and machine learning. You'll learn why Python is the language of AI, how to manage different projects with virtual environments, and write your first AI-oriented program. By the end, you'll have the same setup used by AI researchers at OpenAI, Google DeepMind, and top universities.",
+      "time_estimate": "90-120 minutes including installation and testing"
+    },
+    "core_concepts": [
+      {
+        "concept_id": "why_python_for_ai",
+        "title": "Why Python Dominates AI Development",
+        "explanation": "Python has become the lingua franca of AI for several compelling reasons. First, its syntax is clean and readable, allowing researchers to focus on algorithms rather than complex syntax. Second, Python has an incredible ecosystem of AI libraries: NumPy for numerical computing, Pandas for data manipulation, TensorFlow and PyTorch for deep learning, and scikit-learn for machine learning. Third, Python's interpreted nature makes it perfect for the experimental, iterative process of AI research.",
+        "code_example": {
+          "language": "python",
+          "code": "# This is why AI researchers love Python - clean, readable code\nimport numpy as np\nimport pandas as pd\n\n# Load data, analyze, and make predictions in just a few lines\ndata = pd.read_csv('ai_research_data.csv')\nresults = np.mean(data['accuracy'])\nprint(f'Average AI model accuracy: {results:.2f}%')\n\n# Compare this to doing the same thing in C++ or Java!",
+          "explanation": "This simple example shows Python's power - in 6 lines, we're loading data, performing statistical analysis, and presenting results. The same task would take 50+ lines in lower-level languages."
+        },
+        "visual_aid": {
+          "type": "diagram",
+          "description": "A visual comparison showing Python's AI ecosystem: NumPy -> Pandas -> Scikit-learn -> TensorFlow/PyTorch, demonstrating how each library builds on the previous ones to create a complete AI toolkit.",
+          "alt_text": "Diagram showing Python AI library ecosystem with interconnected components"
+        },
+        "real_world_application": "Google uses Python for TensorFlow, OpenAI built GPT models using Python, and 89% of AI research papers include Python code. Your Python skills directly transfer to industry AI roles."
+      },
+      {
+        "concept_id": "virtual_environments",
+        "title": "Virtual Environments: Managing AI Project Dependencies",
+        "explanation": "Virtual environments are isolated Python installations that prevent dependency conflicts between projects. Imagine working on a computer vision project that needs TensorFlow 2.10, while also working on a natural language processing project that requires an older version. Virtual environments let you maintain separate, clean installations for each project without conflicts.",
+        "code_example": {
+          "language": "bash",
+          "code": "# Create a virtual environment for AI development\npython -m venv ai_research_env\n\n# Activate it (Windows)\nai_research_env\\Scripts\\activate\n\n# Activate it (Mac/Linux)  \nsource ai_research_env/bin/activate\n\n# Install AI libraries in this isolated environment\npip install numpy pandas scikit-learn jupyter\n\n# Your prompt now shows (ai_research_env) indicating you're in the virtual environment",
+          "explanation": "Once activated, any Python packages you install only affect this virtual environment, keeping your global Python installation clean and preventing version conflicts between projects."
+        },
+        "visual_aid": {
+          "type": "flowchart",
+          "description": "A flowchart showing how virtual environments create isolated Python installations, with different projects having their own dependency versions without conflicts.",
+          "alt_text": "Flowchart demonstrating virtual environment isolation for different AI projects"
+        },
+        "real_world_application": "Professional AI teams use virtual environments (or Docker containers) for every project. It's considered unprofessional to not use dependency isolation in production AI systems."
+      },
+      {
+        "concept_id": "python_for_ai_workflow",
+        "title": "The AI Development Workflow",
+        "explanation": "AI development follows a specific workflow that you'll use throughout your career: 1) Set up environment, 2) Explore and prepare data, 3) Build and train models, 4) Evaluate and iterate, 5) Deploy and monitor. Understanding this workflow helps you see how today's setup fits into the bigger picture of AI development.",
+        "code_example": {
+          "language": "python",
+          "code": "# A typical AI development session starts like this:\n\n# 1. Import essential libraries\nimport numpy as np\nimport pandas as pd\nimport matplotlib.pyplot as plt\nfrom sklearn.model_selection import train_test_split\n\n# 2. Load and explore data\ndata = pd.read_csv('data.csv')\nprint(data.head())\nprint(data.describe())\n\n# 3. Prepare data for machine learning\nX = data.drop('target', axis=1)\ny = data['target']\nX_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)\n\n# 4. This is where you'd build and train your AI model\n# (We'll learn this in upcoming weeks!)",
+          "explanation": "This code template represents the start of most AI projects. You'll use variations of this pattern hundreds of times in your AI career."
+        },
+        "visual_aid": {
+          "type": "diagram", 
+          "description": "The AI development lifecycle: Problem Definition -> Data Collection -> Data Preparation -> Model Building -> Training -> Evaluation -> Deployment -> Monitoring, with arrows showing the iterative nature.",
+          "alt_text": "Circular diagram showing the iterative AI development lifecycle"
+        },
+        "real_world_application": "This exact workflow is used for developing chatbots, recommendation systems, autonomous vehicle AI, medical diagnosis systems, and virtually every AI application you interact with daily."
+      }
+    ],
+    "guided_practice": {
+      "title": "Let's Build Your AI Development Environment Together",
+      "steps": [
+        {
+          "step_number": 1,
+          "instruction": "Verify Python installation and check version",
+          "code_template": "# Open terminal/command prompt and type:\npython --version\n# or if the above doesn't work:\npython3 --version",
+          "expected_output": "Python 3.8.x or higher (Python 3.10+ recommended for best AI library compatibility)",
+          "common_mistakes": ["Using Python 2.x instead of Python 3.x", "Python not added to PATH"],
+          "hints": ["If 'python' command not found, try 'python3'", "On Windows, try 'py' instead of 'python'"]
+        },
+        {
+          "step_number": 2,
+          "instruction": "Create your first AI research virtual environment",
+          "code_template": "# Create virtual environment\npython -m venv my_first_ai_env\n\n# Activate it\n# Windows:\nmy_first_ai_env\\Scripts\\activate\n# Mac/Linux:\nsource my_first_ai_env/bin/activate",
+          "expected_output": "Your terminal prompt should change to show (my_first_ai_env) at the beginning",
+          "common_mistakes": ["Forgetting to activate the environment", "Using wrong activation command for your OS"],
+          "hints": ["If activation fails, check the path to your virtual environment", "Make sure you're in the right directory"]
+        },
+        {
+          "step_number": 3,
+          "instruction": "Install essential AI development packages",
+          "code_template": "# Install fundamental AI/ML libraries\npip install numpy pandas matplotlib jupyter ipython\n\n# Verify installation\npython -c \"import numpy; print(f'NumPy version: {numpy.__version__}')\"",
+          "expected_output": "NumPy version: 1.24.x or higher",
+          "common_mistakes": ["Installing packages outside virtual environment", "Network/firewall blocking pip"],
+          "hints": ["Ensure virtual environment is activated before installing", "Use pip3 if pip doesn't work"]
+        },
+        {
+          "step_number": 4,
+          "instruction": "Write and run your first AI-oriented Python program",
+          "code_template": "# Create file: my_first_ai_program.py\nimport numpy as np\nimport pandas as pd\n\n# Simulate some AI research data\nnp.random.seed(42)  # For reproducible results\ndata = {\n    'experiment': range(1, 11),\n    'accuracy': np.random.uniform(0.7, 0.95, 10),\n    'training_time': np.random.uniform(10, 60, 10)\n}\n\ndf = pd.DataFrame(data)\nprint(\"AI Experiment Results:\")\nprint(df)\n\nprint(f\"\\nAverage Accuracy: {df['accuracy'].mean():.2f}\")\nprint(f\"Best Experiment: #{df.loc[df['accuracy'].idxmax(), 'experiment']}\")\n\nprint(\"\\n🎉 Congratulations! You've written your first AI development program!\")",
+          "expected_output": "A table showing experiment data and summary statistics",
+          "common_mistakes": ["Syntax errors from copying code", "Not saving file with .py extension"],
+          "hints": ["Copy code exactly as shown", "Run with: python my_first_ai_program.py"]
+        }
+      ]
+    },
+    "summary": {
+      "key_takeaways": [
+        "Python is the dominant language for AI development due to its simplicity and rich ecosystem",
+        "Virtual environments prevent dependency conflicts and are essential for professional AI development", 
+        "The AI development workflow follows a predictable pattern you'll use throughout your career",
+        "Setting up your environment correctly from the start saves countless hours later",
+        "You're now equipped with the same tools used by AI researchers at top companies and universities"
+      ],
+      "next_steps": "Tomorrow we'll dive into Python data types and variables, building on this foundation to start working with the kinds of data structures used in AI and machine learning applications."
+    }
+  },
+  "practice_tab": {
+    "exercises": [
+      {
+        "exercise_id": "ex_1",
+        "title": "Environment Verification Challenge",
+        "difficulty": 1,
+        "estimated_time": 10,
+        "description": "Create a Python script that verifies your development environment is set up correctly by checking installed packages and versions.",
+        "starter_code": "# Environment verification script\nimport sys\n\n# Your task: Complete this script to check:\n# 1. Python version\n# 2. Whether numpy is installed and its version\n# 3. Whether pandas is installed and its version\n# 4. Print a success message if all checks pass\n\nprint(f\"Python version: {sys.version}\")\n\n# TODO: Add checks for numpy and pandas\n# TODO: Add success message",
+        "solution": "import sys\ntry:\n    import numpy as np\n    import pandas as pd\n    \n    print(f\"Python version: {sys.version}\")\n    print(f\"NumPy version: {np.__version__}\")\n    print(f\"Pandas version: {pd.__version__}\")\n    print(\"\\n✅ Environment verification successful!\")\n    print(\"Your AI development environment is ready!\")\n    \nexcept ImportError as e:\n    print(f\"❌ Missing package: {e}\")\n    print(\"Please install missing packages with: pip install numpy pandas\")",
+        "test_cases": [
+          {
+            "input": "Run the script in activated virtual environment",
+            "expected_output": "Should show Python, NumPy, and Pandas versions with success message",
+            "description": "Verifies all essential packages are installed"
+          }
+        ],
+        "hints": [
+          {
+            "level": 1,
+            "hint": "Use try/except blocks to handle cases where packages might not be installed"
+          },
+          {
+            "level": 2,
+            "hint": "Import numpy as np and pandas as pd, then use np.__version__ and pd.__version__"
+          },
+          {
+            "level": 3,
+            "hint": "Wrap imports in try/except ImportError to catch missing packages gracefully"
+          }
+        ],
+        "learning_notes": "This exercise reinforces environment management and introduces error handling - both crucial for AI development."
+      },
+      {
+        "exercise_id": "ex_2",
+        "title": "Virtual Environment Master",
+        "difficulty": 2,
+        "estimated_time": 20,
+        "description": "Practice creating, activating, and managing multiple virtual environments for different AI projects.",
+        "starter_code": "# This is a command-line exercise\n# Follow the instructions to create multiple environments\n\n# Instructions will be provided step-by-step",
+        "solution": "# Command sequence for this exercise:\n# 1. Create environment for computer vision: python -m venv cv_project\n# 2. Create environment for NLP: python -m venv nlp_project  \n# 3. Activate cv_project and install opencv-python\n# 4. Activate nlp_project and install nltk\n# 5. Create a comparison script showing different installed packages",
+        "test_cases": [
+          {
+            "input": "Create two different virtual environments with different packages",
+            "expected_output": "Two isolated environments with different package lists",
+            "description": "Demonstrates environment isolation"
+          }
+        ],
+        "hints": [
+          {
+            "level": 1,
+            "hint": "Remember to deactivate one environment before activating another"
+          },
+          {
+            "level": 2,
+            "hint": "Use 'pip list' to see what packages are installed in each environment"
+          },
+          {
+            "level": 3,
+            "hint": "Create a simple script in each environment to verify the different packages are available"
+          }
+        ],
+        "learning_notes": "This exercise builds practical skills in dependency management that you'll use daily in AI development."
+      }
+    ],
+    "mini_project": {
+      "title": "AI Researcher's Environment Setup",
+      "description": "Create a comprehensive development environment setup that includes all tools an AI researcher would need, plus a verification and documentation system.",
+      "requirements": [
+        "Create a virtual environment named 'ai_researcher_env'",
+        "Install all essential AI development packages (numpy, pandas, matplotlib, jupyter, scikit-learn)",
+        "Write a comprehensive environment verification script",
+        "Create documentation explaining your setup choices",
+        "Include a requirements.txt file for easy environment replication"
+      ],
+      "starter_template": "# AI Researcher Environment Setup Project\n\n# Step 1: Environment creation commands\n# Document your commands here\n\n# Step 2: Package installation\n# List all packages and why you chose them\n\n# Step 3: Verification script\n# Write code to verify everything works\n\n# Step 4: Documentation\n# Explain your choices and how others can replicate your setup",
+      "evaluation_criteria": [
+        "Environment creates successfully and is properly isolated",
+        "All required packages install without conflicts", 
+        "Verification script runs without errors and provides clear feedback",
+        "Documentation is clear and helps others understand the setup",
+        "Requirements.txt file allows easy environment replication"
+      ],
+      "portfolio_worthy": true,
+      "estimated_time": 60
+    }
+  },
+  "assessment_tab": {
+    "knowledge_check": [
+      {
+        "question_id": "q_1",
+        "type": "multiple_choice",
+        "question": "Why is Python considered the best language for AI development?",
+        "options": [
+          "It's the fastest programming language",
+          "It has clean syntax and extensive AI libraries like NumPy, TensorFlow, and scikit-learn",
+          "It was specifically designed for artificial intelligence",
+          "It's the only language that can handle machine learning"
+        ],
+        "correct_answer": 1,
+        "explanation": "Python's combination of readable syntax and rich ecosystem of AI libraries (NumPy, Pandas, TensorFlow, PyTorch, scikit-learn) makes it ideal for AI development. While not the fastest language, its productivity benefits and extensive tooling make it the clear choice for AI research and development.",
+        "concept_tested": "Understanding Python's role in AI development",
+        "difficulty": 2
+      },
+      {
+        "question_id": "q_2",
+        "type": "multiple_choice", 
+        "question": "What is the primary purpose of virtual environments in Python development?",
+        "options": [
+          "To make Python run faster",
+          "To create isolated environments that prevent dependency conflicts between projects",
+          "To automatically install packages",
+          "To provide better syntax highlighting"
+        ],
+        "correct_answer": 1,
+        "explanation": "Virtual environments create isolated Python installations where each project can have its own specific package versions without conflicting with other projects. This is essential in AI development where different projects may require different versions of libraries like TensorFlow or scikit-learn.",
+        "concept_tested": "Understanding virtual environments and dependency management",
+        "difficulty": 2
+      },
+      {
+        "question_id": "q_3",
+        "type": "code_execution",
+        "question": "Write a Python script that imports NumPy and Pandas, creates a simple dataset, and calculates the mean of a numerical column. The script should handle the case where these libraries might not be installed.",
+        "starter_code": "# Write your code here\n# Remember to handle import errors gracefully\n",
+        "test_cases": [
+          {
+            "input": "Run in environment with numpy and pandas installed",
+            "expected_output": "Should successfully import libraries, create data, and calculate mean"
+          },
+          {
+            "input": "Run in environment without packages",
+            "expected_output": "Should handle ImportError gracefully with helpful message"
+          }
+        ],
+        "evaluation_criteria": ["correctness", "error_handling", "code_style"],
+        "partial_credit": true
+      },
+      {
+        "question_id": "q_4", 
+        "type": "conceptual",
+        "question": "Describe the typical AI development workflow and explain how setting up a proper Python environment fits into this workflow. Give a specific example of how dependency management helps in a real AI project.",
+        "rubric": {
+          "excellent": "Complete workflow description (data collection -> preparation -> modeling -> evaluation -> deployment) with clear explanation of environment setup's role and specific, realistic example of dependency management",
+          "good": "Good workflow understanding with some connection to environment setup and a relevant example",
+          "needs_improvement": "Basic workflow understanding but missing connections to environment setup or example lacks detail"
+        },
+        "sample_answer": "The AI development workflow typically follows these steps: 1) Problem definition and data collection, 2) Data exploration and preprocessing, 3) Model selection and training, 4) Evaluation and validation, 5) Deployment and monitoring. Proper Python environment setup is crucial at the beginning because it ensures all team members work with compatible library versions. For example, in a computer vision project, you might need TensorFlow 2.10 for model training but OpenCV 4.5 for image preprocessing. Virtual environments prevent version conflicts and ensure reproducible results across different machines and team members."
+      }
+    ],
+    "mastery_requirements": {
+      "minimum_score": 80,
+      "required_questions_correct": ["q_1", "q_2"], 
+      "retry_policy": "Unlimited attempts with 24-hour cooldown after 3 consecutive failures",
+      "remediation": "Review virtual environments and Python AI ecosystem sections if failed"
+    }
+  },
+  "lab_tab": {
+    "title": "Hands-on Lab: Professional AI Development Environment",
+    "objective": "Set up a complete, professional-grade Python environment for AI development that you'll use throughout the entire 84-week program.",
+    "setup_instructions": [
+      "Ensure you have Python 3.8+ installed on your system",
+      "Have a terminal/command prompt ready",
+      "Create a dedicated folder for your AI learning journey"
+    ],
+    "tasks": [
+      {
+        "task_id": "task_1",
+        "title": "Master Environment Setup",
+        "description": "Create and configure a virtual environment with all essential AI development tools",
+        "starter_code": "# Master AI Environment Setup\n# Complete each step and verify success\n\n# Step 1: Create virtual environment\n# Step 2: Activate environment \n# Step 3: Install core packages\n# Step 4: Verify installation\n# Step 5: Document your setup",
+        "completion_criteria": "Virtual environment activated, packages installed, verification script runs successfully",
+        "verification": "Run 'pip list' and confirm numpy, pandas, matplotlib, jupyter are installed"
+      },
+      {
+        "task_id": "task_2", 
+        "title": "Build Your First AI Analysis Tool",
+        "description": "Create a Python script that simulates AI experiment tracking - a tool you'll use throughout your learning journey",
+        "starter_code": "import numpy as np\nimport pandas as pd\nimport matplotlib.pyplot as plt\n\n# Create an AI experiment tracker\n# Track: experiment_id, model_type, accuracy, training_time, date\n# Functions: add_experiment, get_best_model, plot_progress, save_results\n\nclass AIExperimentTracker:\n    def __init__(self):\n        # Initialize your experiment tracking system\n        pass\n    \n    def add_experiment(self, model_type, accuracy, training_time):\n        # Add a new experiment result\n        pass\n    \n    def get_best_model(self):\n        # Return the experiment with highest accuracy\n        pass\n    \n    # TODO: Add more methods",
+        "completion_criteria": "Working experiment tracker that can add experiments, find best models, and display results",
+        "verification": "Create 5 test experiments and successfully retrieve the best performing one"
+      }
+    ],
+    "stretch_goals": [
+      "Set up Jupyter Lab for interactive development",
+      "Configure VS Code with Python extensions for AI development",
+      "Create an automated environment setup script that others can use",
+      "Research and install additional AI libraries for specific domains (computer vision, NLP)"
+    ],
+    "cleanup": "Keep your virtual environment - you'll use it throughout the program. Document your setup process for future reference."
+  },
+  "meta_learning_data": {
+    "engagement_points": [
+      "Hook about AI breakthroughs starting with environment setup",
+      "Real-world applications of Python in major AI companies",
+      "First successful program execution",
+      "Completion of professional development environment"
+    ],
+    "common_struggles": [
+      "Python installation and PATH configuration",
+      "Virtual environment activation (OS-specific commands)", 
+      "Package installation failures due to network/permissions",
+      "Understanding the connection between setup and AI development"
+    ],
+    "success_indicators": [
+      "Successfully creates and activates virtual environments",
+      "Installs packages without errors",
+      "Writes and runs Python code confidently",
+      "Understands the professional AI development workflow"
+    ],
+    "improvement_suggestions": [
+      "Add video walkthroughs for each operating system",
+      "Include troubleshooting section for common setup issues",
+      "Provide downloadable setup verification checklist",
+      "Add peer collaboration component for setup assistance"
+    ],
+    "time_tracking": {
+      "average_completion_time": 0,
+      "struggling_student_time": 0,
+      "advanced_student_time": 0
+    }
+  }
+}
